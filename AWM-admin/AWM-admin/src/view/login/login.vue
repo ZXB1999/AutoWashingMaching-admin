@@ -5,7 +5,6 @@
       <h1 style="margin-top: 0">欢迎使用AWM后台管理系统</h1>
     </div>
     <div style="height: 4rem"></div>
-    <div></div>
     <div class="login">
       <el-input v-model="username" placeholder="请输入用户名"></el-input>
       <div style="height: 2rem"></div>
@@ -90,7 +89,7 @@ export default {
 .login {
   margin: 0 auto;
   width: 500px;
-  height: 500px;
+  height: 400px;
 }
 .loginbtn {
   width: 300px;

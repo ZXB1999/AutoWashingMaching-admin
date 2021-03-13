@@ -9,17 +9,17 @@
       text-color="#fff"
       active-text-color="#ffd04b"
     >
-      <el-menu-item index="1">处理中心</el-menu-item>
-      <el-menu-item index="2">我的工作台</el-menu-item>
-      <el-menu-item index="3" disabled>消息中心</el-menu-item>
-      <el-menu-item index="4"><a target="_blank">订单管理</a></el-menu-item>
-
+      <el-menu-item index="1">首页</el-menu-item>
+      <el-menu-item index="2">系统状态</el-menu-item>
+      <el-menu-item index="3" >消息中心</el-menu-item>
+      <span class="name">欢迎使用AutoWashingMaching-自助洗衣系统后台管理系统</span>
       <el-dropdown>
         <i class="el-icon-setting" style="margin-right: 15px"></i>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>查看</el-dropdown-item>
           <el-dropdown-item>新增</el-dropdown-item>
-          <el-dropdown-item>注销</el-dropdown-item>
+          <!-- 父组件想在子组件上监听自己的click的话，需要加上native修饰符 -->
+          <el-dropdown-item @click.native="logout">注销</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <span class="name">admin</span>
@@ -42,6 +42,10 @@ export default {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
+    logout(){
+      sessionStorage.clear();
+      this.$router.push('/')
+    }
   },
 };
 </script>
