@@ -3,6 +3,7 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
+const serverpath = 'http://127.0.0.1:9527'
 
 module.exports = {
   dev: {
@@ -16,6 +17,27 @@ module.exports = {
         changOrigin: true,  //允许跨域
         pathRewrite: {
           '^/Login': '/oauth/token' 
+        }
+      },
+      '/MachineList': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/MachineList': '/AWM/PROVIDERMACHINE/queryAll/list' 
+        }
+      },
+      '/UserList': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/UserList': '/AWM/PROVIDERUSER/findallUser' 
+        }
+      },
+      '/OrderList': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/OrderList': '/AWM/PROVIDERORDER/allOrder' 
         }
       }
     },

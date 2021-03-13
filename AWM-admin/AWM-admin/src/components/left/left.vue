@@ -1,4 +1,3 @@
-
 <template>
   <div id="left">
     <el-row class="tac">
@@ -12,11 +11,15 @@
           text-color="#fff"
           active-text-color="#ffd04b"
         >
-          <el-menu-item style="height:60px;color:white" @click.native="home" index="1">
-            <img src="../../assets/logo/logo01.png" alt="">
+          <el-menu-item
+            style="height: 60px; color: white"
+            @click.native="home"
+            index="1"
+          >
+            <img src="../../assets/logo/logo01.png" alt="" />
             <span>自助洗衣后台管理系统</span>
           </el-menu-item>
-          <el-submenu index="2">
+          <el-submenu index="2" disabled>
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>导航一</span>
@@ -34,15 +37,15 @@
               <el-menu-item index="2-4-1">选项1</el-menu-item>
             </el-submenu>
           </el-submenu>
-          <el-menu-item index="3">
+          <el-menu-item @click="machinelist" index="3">
             <i class="el-icon-menu"></i>
             <span slot="title">设备</span>
           </el-menu-item>
-          <el-menu-item index="4">
+          <el-menu-item index="4" @click="userlist">
             <i class="el-icon-document"></i>
-            <span slot="title">用户</span>
+            <span slot="title" >用户</span>
           </el-menu-item>
-          <el-menu-item index="5">
+          <el-menu-item index="5" @click="orderlist">
             <i class="el-icon-setting"></i>
             <span slot="title">订单</span>
           </el-menu-item>
@@ -53,6 +56,11 @@
 </template>
 <script>
 export default {
+  data() {
+    return {
+      info: null,
+    };
+  },
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
@@ -60,8 +68,17 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
-    home(){
-      this.$router.push('/homepage')
+    home() {
+      this.$router.push("/homepage");
+    },
+    machinelist() {
+      this.$router.push("/homepage/machinelist");
+    },
+    userlist() {
+      this.$router.push("/homepage/userList");
+    },
+    orderlist(){
+      this.$router.push("/homepage/orderlist");
     }
   },
 };

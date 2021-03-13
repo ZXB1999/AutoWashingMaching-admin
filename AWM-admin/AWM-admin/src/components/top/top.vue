@@ -9,9 +9,9 @@
       text-color="#fff"
       active-text-color="#ffd04b"
     >
-      <el-menu-item index="1">首页</el-menu-item>
-      <el-menu-item index="2">系统状态</el-menu-item>
-      <el-menu-item index="3" >消息中心</el-menu-item>
+      <el-menu-item index="1" disabled>首页</el-menu-item>
+      <el-menu-item index="2" disabled>系统状态</el-menu-item>
+      <el-menu-item index="3" disabled>消息中心</el-menu-item>
       <span class="name">欢迎使用AutoWashingMaching-自助洗衣系统后台管理系统</span>
       <el-dropdown>
         <i class="el-icon-setting" style="margin-right: 15px"></i>
@@ -61,5 +61,9 @@ export default {
   color: white;
   font-size: 18px;
   margin-right: 30px;
+}
+.el-menu{
+  border-bottom-width: 0px;
+  height: 60px;
 }
 </style>

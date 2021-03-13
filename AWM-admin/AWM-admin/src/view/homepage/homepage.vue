@@ -11,7 +11,9 @@
           <Top></Top>
         </el-header>
 
-        <el-main> </el-main>
+        <el-main>
+          <router-view />
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -24,12 +26,12 @@ export default {
   components: {
     Top,
     Left,
-  },
+  }
 };
 </script>
 
 <style scoped>
-div{
+div {
   height: 100%;
 }
 .el-header {
@@ -44,9 +46,8 @@ div{
   border: 0;
 }
 
-.el-container{
-    height: 100%;
+.el-container {
+  height: 100%;
 }
-
 </style>
 
