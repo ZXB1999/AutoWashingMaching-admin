@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HomePage from '@/view/homepage/homepage.vue'
+import Main from '@/view/homepage/main.vue'
 import Login from '@/view/login/login.vue'
 import MachineList from '@/view/machine/machinelist.vue'
 import UserList from '@/view/user/userlist.vue'
@@ -31,6 +32,11 @@ export default new Router({
         needLogin: true, //需要加校检判断的路由
       },
       children: [
+        {
+          path: 'main',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
+          name: 'mian',
+          component: Main
+        },
         {
           path: 'machineList',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
           name: 'machineList',

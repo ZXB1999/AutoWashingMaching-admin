@@ -69,7 +69,7 @@ export default {
       console.log(key, keyPath);
     },
     home() {
-      this.$router.push("/homepage");
+      this.$router.push("/homepage/main");
     },
     machinelist() {
       this.$router.push("/homepage/machinelist");

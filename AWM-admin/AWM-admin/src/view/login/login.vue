@@ -18,7 +18,7 @@
     </div>
     <div class="logo">
       <el-row>
-        <el-col :span="12"
+        <el-col :span="8"
           ><div class="imgsty">
             <img
               src="../../assets/logo.png"
@@ -27,12 +27,21 @@
               alt=""
             /></div
         ></el-col>
-        <el-col :span="12"
+        <el-col :span="8"
           ><div class="imgsty">
             <img
               src="../../assets/logo/elementui.svg"
               height="100"
               width="100"
+              alt=""
+            /></div
+        ></el-col>
+        <el-col :span="8"
+          ><div style="margin-top: 30px;" class="imgsty">
+            <img
+              src="../../assets/logo/Echartslogo.png"
+              height="36"
+              width="160"
               alt=""
             /></div
         ></el-col>
@@ -68,7 +77,7 @@ export default {
         .then((res) => {
             localStorage.clear();
             sessionStorage["access_token"] = res.data.access_token;
-            this.$router.push("/homepage");
+            this.$router.push("/homepage/main");
         })
         .catch(function () {
             alert("ERROR")
