@@ -23,7 +23,7 @@ module.exports = {
         target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
         changOrigin: true,  //允许跨域
         pathRewrite: {
-          '^/MachineList': '/AWM/PROVIDERMACHINE/queryAll/list' 
+          '^/MachineList': '/AWM/PROVIDERMACHINE/queryAllMachine' 
         }
       },
       '/UserList': {
@@ -38,6 +38,27 @@ module.exports = {
         changOrigin: true,  //允许跨域
         pathRewrite: {
           '^/OrderList': '/AWM/PROVIDERORDER/allOrder' 
+        }
+      },
+      '/CountUser': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/CountUser': '/AWM/PROVIDERUSER/countuser' 
+        }
+      },
+      '/CountOrder': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/CountOrder': '/AWM/PROVIDERORDER/countorder' 
+        }
+      },
+      '/CountMachine': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/CountMachine': '/AWM/PROVIDERMACHINE/countmachine' 
         }
       }
     },

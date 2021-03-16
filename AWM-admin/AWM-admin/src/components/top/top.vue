@@ -9,7 +9,7 @@
       text-color="#fff"
       active-text-color="#ffd04b"
     >
-      <el-menu-item index="1" disabled>首页</el-menu-item>
+      <el-menu-item index="1" @click="tomain">首页</el-menu-item>
       <el-menu-item index="2" disabled>系统状态</el-menu-item>
       <el-menu-item index="3" disabled>消息中心</el-menu-item>
       <span class="name">欢迎使用AutoWashingMaching-自助洗衣系统后台管理系统</span>
@@ -45,6 +45,9 @@ export default {
     logout(){
       sessionStorage.clear();
       this.$router.push('/')
+    },
+    tomain(){
+      this.$router.push('/homepage/main')
     }
   },
 };

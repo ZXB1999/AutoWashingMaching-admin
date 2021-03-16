@@ -35,22 +35,34 @@ export default new Router({
         {
           path: 'main',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
           name: 'mian',
-          component: Main
+          component: Main,
+          meta: {
+            needLogin: true, //需要加校检判断的路由
+          },
         },
         {
           path: 'machineList',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
           name: 'machineList',
-          component: MachineList
+          component: MachineList,
+          meta: {
+            needLogin: true, //需要加校检判断的路由
+          },
         },
         {
           path: 'userList',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
           name: 'userList',
-          component: UserList
+          component: UserList,
+          meta: {
+            needLogin: true, //需要加校检判断的路由
+          },
         },
         {
           path: 'orderList',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
           name: 'orderList',
-          component: OrderList
+          component: OrderList,
+          meta: {
+            needLogin: true, //需要加校检判断的路由
+          },
         }
       ]
     },

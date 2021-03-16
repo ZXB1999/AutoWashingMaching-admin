@@ -59,6 +59,7 @@ export default {
   },
   methods: {
     login() {
+      let that=this
       this.axios
         .post(
           "/Login?client_id=" +
@@ -77,10 +78,17 @@ export default {
         .then((res) => {
             localStorage.clear();
             sessionStorage["access_token"] = res.data.access_token;
+            this.$message({
+            type: 'success',
+            message: '登陆成功'
+          });
             this.$router.push("/homepage/main");
         })
         .catch(function () {
-            alert("ERROR")
+            that.$message({
+            type: 'error',
+            message: 'ERROR'
+          });
         });
     },
   },

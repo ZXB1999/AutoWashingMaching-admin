@@ -1,8 +1,44 @@
 <template>
   <div>
+    <el-row>
+      <div class="mtop">
+        <el-button @click="dialogFormVisible = true">新增设备</el-button>
+        <el-dialog title="设备信息" :visible.sync="dialogFormVisible">
+          <el-form :model="form">
+            <el-form-item label="品牌" :label-width="formLabelWidth">
+              <el-select v-model="form.brand" placeholder="请选择品牌">
+                <el-option label="海尔" value="海尔"></el-option>
+                <el-option label="美的" value="美的"></el-option>
+                <el-option label="其他" value="其他"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="类别" :label-width="formLabelWidth">
+              <el-select v-model="form.type" placeholder="请选择设备类别">
+                <el-option label="洗衣机" value="1"></el-option>
+                <el-option label="洗鞋机" value="2"></el-option>
+                <el-option label="其他" value="0"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="设备型号" :label-width="formLabelWidth">
+              <el-input v-model="form.model" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="newmachine">确 定</el-button>
+          </div>
+        </el-dialog>
+        <el-button type="primary">主要按钮</el-button>
+        <el-button type="success">成功按钮</el-button>
+        <el-button type="info">信息按钮</el-button>
+        <el-button type="warning">警告按钮</el-button>
+        <el-button type="danger">危险按钮</el-button>
+      </div>
+    </el-row>
     <el-table :data="info" style="width: 100%">
-      <el-table-column prop="createTime" label="日期"></el-table-column>
-      <el-table-column prop="brand" label="品牌"> </el-table-column>
+      <el-table-column prop="createTime"  label="添加日期"></el-table-column>
+      <el-table-column prop="updateTime"  label="更新日期"></el-table-column>
+      <el-table-column prop="brand" width="80" label="品牌"> </el-table-column>
       <el-table-column
         prop="machineId"
         label="设备ID"
@@ -14,8 +50,17 @@
         <el-button type="primary" icon="el-icon-delete"></el-button>
       </el-table-column>
     </el-table>
-    <!-- <el-pagination background layout="prev, pager, next" :total="1000">
-    </el-pagination> -->
+    <el-pagination
+      :hide-on-single-page="this.hosp"
+      background
+      layout="prev, pager, next"
+      @current-change="handleCurrentChange"
+      @prev-click="prev"
+      @next-click="next"
+      :page-size="this.size"
+      :total="this.totals"
+    >
+    </el-pagination>
   </div>
 </template>
 <script>
@@ -23,17 +68,35 @@ import { formatDate } from "../../utils/formatDate.js";
 export default {
   data() {
     return {
+      formLabelWidth: '120px',
+      form: {
+          brand: '',
+          model: '',
+          type: ''
+        },
+      dialogFormVisible: false,
+      hosp: true,
+      totals: 0,
+      current: 1,
+      size: 7,
       info: null,
     };
   },
   created() {
     this.axios
-      .get("/MachineList", {
+      .get("/MachineList/" + this.current + "/" + this.size, {
         headers: {
           Authorization: "Bearer " + sessionStorage.getItem("access_token"),
         }, //oauth2.0认证
       })
       .then((response) => (this.info = response.data));
+    this.axios
+      .get("/CountMachine", {
+        headers: {
+          Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+        }, //oauth2.0认证
+      })
+      .then((response) => (this.totals = response.data));
   },
   filters: {
     formatDate(time) {
@@ -41,5 +104,26 @@ export default {
       return formatDate(date, "yyyy-MM-dd hh:mm");
     },
   },
+  methods: {
+    prev() {
+      this.current -= 1;
+    },
+    next() {
+      this.current += 1;
+    },
+    handleCurrentChange(val) {
+      // console.log(`当前页: ${val}`);
+      this.current = val;
+    },
+    newmachine(){
+      alert(this.form)
+      this.dialogFormVisible = false
+    }
+  },
 };
 </script>
+<style scoped>
+.mtop {
+  float: left;
+}
+</style>
