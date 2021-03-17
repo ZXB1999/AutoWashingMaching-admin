@@ -49,5 +49,8 @@ div {
 .el-container {
   height: 100%;
 }
+.el-main{
+  padding: 5px;
+}
 </style>
 

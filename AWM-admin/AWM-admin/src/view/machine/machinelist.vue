@@ -35,9 +35,29 @@
         <el-button type="danger">危险按钮</el-button>
       </div>
     </el-row>
+    <el-row>
+      <div class="mtop">
+        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+          <el-form-item label="设备ID">
+            <el-input v-model="formInline.user" placeholder="设备ID"></el-input>
+          </el-form-item>
+          <el-form-item label="品牌">
+            <el-select v-model="formInline.region" placeholder="请选择品牌">
+              <el-option label="海尔" value="海尔"></el-option>
+              <el-option label="美的" value="美的"></el-option>
+              <el-option label="其他" value="其他"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit">查询</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-row>
+
     <el-table :data="info" style="width: 100%">
-      <el-table-column prop="createTime"  label="添加日期"></el-table-column>
-      <el-table-column prop="updateTime"  label="更新日期"></el-table-column>
+      <el-table-column prop="createTime" label="添加日期"></el-table-column>
+      <el-table-column prop="updateTime" label="更新日期"></el-table-column>
       <el-table-column prop="brand" width="80" label="品牌"> </el-table-column>
       <el-table-column
         prop="machineId"
@@ -45,11 +65,23 @@
         width="300"
       ></el-table-column>
       <el-table-column prop="model" label="设备型号"> </el-table-column>
-      <el-table-column>
-        <el-button type="primary" icon="el-icon-edit"></el-button>
-        <el-button type="primary" icon="el-icon-delete"></el-button>
+
+      <el-table-column prop="" label="操作">
+        <template slot-scope="scope">
+          <el-button type="primary" icon="el-icon-edit"></el-button>
+          <el-button type="danger" icon="el-icon-delete"></el-button>
+          <el-tooltip placement="top">
+            <div slot="content">点击查看设备二维码</div>
+            <el-button
+              @click="QRcodeimg(scope.row)"
+              type="info"
+              icon="el-icon-full-screen"
+            ></el-button>
+          </el-tooltip>
+        </template>
       </el-table-column>
     </el-table>
+
     <el-pagination
       :hide-on-single-page="this.hosp"
       background
@@ -68,18 +100,23 @@ import { formatDate } from "../../utils/formatDate.js";
 export default {
   data() {
     return {
-      formLabelWidth: '120px',
+      formLabelWidth: "120px",
       form: {
-          brand: '',
-          model: '',
-          type: ''
-        },
+        brand: "",
+        model: "",
+        type: "",
+      },
       dialogFormVisible: false,
       hosp: true,
       totals: 0,
       current: 1,
       size: 7,
       info: null,
+      formInline: {
+        user: "",
+        region: "",
+      },
+      img: null,
     };
   },
   created() {
@@ -115,15 +152,43 @@ export default {
       // console.log(`当前页: ${val}`);
       this.current = val;
     },
-    newmachine(){
-      alert(this.form)
-      this.dialogFormVisible = false
-    }
+    newmachine() {
+      // alert(this.form);
+      this.dialogFormVisible = false;
+    },
+    onSubmit() {
+      console.log("submit!");
+    },
+    QRcodeimg(val) {
+      this.axios
+        .get("/QRcode/" + val.machineId, {
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+          }, //oauth2.0认证
+          responseType: "blob",
+        })
+        .then(
+          (response) => (
+            (this.img = window.URL.createObjectURL(response.data)),
+            this.$alert('<img src="' + this.img + '" alt="">', "设备二维码", {
+              dangerouslyUseHTMLString: true,
+            }).catch((err) => {
+              // console.log(err);
+            })
+          )
+        );
+    },
   },
 };
 </script>
 <style scoped>
 .mtop {
+  margin-top: 10px;
   float: left;
+}
+</style>
+<style>
+.el-message-box {
+  width: 320px;
 }
 </style>

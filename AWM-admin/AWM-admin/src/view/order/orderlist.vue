@@ -10,6 +10,27 @@
         <el-button type="danger">危险按钮</el-button>
       </div>
     </el-row>
+
+    <el-row>
+      <div class="mtop">
+        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+          <el-form-item label="设备ID">
+            <el-input v-model="formInline.user" placeholder="设备ID"></el-input>
+          </el-form-item>
+          <el-form-item label="品牌">
+            <el-select v-model="formInline.region" placeholder="请选择品牌">
+              <el-option label="海尔" value="海尔"></el-option>
+              <el-option label="美的" value="美的"></el-option>
+              <el-option label="其他" value="其他"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit">查询</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-row>
+
     <el-table :data="info" style="width: 100%">
       <el-table-column prop="createTime"  label="订单创建时间"></el-table-column>
       <el-table-column prop="startTime"  label="订单开始时间"></el-table-column>
@@ -57,6 +78,10 @@ export default {
       current: 1,
       size: 7,
       info: null,
+      formInline: {
+        user: "",
+        region: "",
+      },
     };
   },
   created() {
@@ -93,11 +118,15 @@ export default {
       // console.log(`当前页: ${val}`);
       this.current=val;
     },
+    onSubmit() {
+      console.log("submit!");
+    },
   },
 };
 </script>
 <style scoped>
 .mtop {
+  margin-top: 10px;
   float: left;
 }
 </style>
