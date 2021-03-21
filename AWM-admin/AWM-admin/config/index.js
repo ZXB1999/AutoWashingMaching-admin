@@ -67,6 +67,20 @@ module.exports = {
         pathRewrite: {
           '^/QRcode': '/AWM/PROVIDERMACHINE/machineQRcode' 
         }
+      },
+      '/NewMachine': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/NewMachine': '/AWM/PROVIDERMACHINE/creatnewMachine' 
+        }
+      },
+      '/QueryMachine': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/QueryMachine': '/AWM/PROVIDERMACHINE/queryMachine' 
+        }
       }
     },
 

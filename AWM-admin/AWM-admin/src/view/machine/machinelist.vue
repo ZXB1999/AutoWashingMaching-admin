@@ -1,8 +1,19 @@
 <template>
   <div>
-    <el-row>
-      <div class="mtop">
-        <el-button @click="dialogFormVisible = true">新增设备</el-button>
+    <!-- <div>
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>活动管理</el-breadcrumb-item>
+        <el-breadcrumb-item>活动列表</el-breadcrumb-item>
+        <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+      </el-breadcrumb>
+    </div> -->
+
+    <div class="mtop">
+      <el-row>
+        <el-button type="primary" @click="dialogFormVisible = true"
+          >新增设备</el-button
+        >
         <el-dialog title="设备信息" :visible.sync="dialogFormVisible">
           <el-form :model="form">
             <el-form-item label="品牌" :label-width="formLabelWidth">
@@ -28,21 +39,26 @@
             <el-button type="primary" @click="newmachine">确 定</el-button>
           </div>
         </el-dialog>
-        <el-button type="primary">主要按钮</el-button>
+        <!-- <el-button type="primary">主要按钮</el-button>
         <el-button type="success">成功按钮</el-button>
         <el-button type="info">信息按钮</el-button>
         <el-button type="warning">警告按钮</el-button>
-        <el-button type="danger">危险按钮</el-button>
-      </div>
-    </el-row>
-    <el-row>
-      <div class="mtop">
+        <el-button type="danger">危险按钮</el-button> -->
+        <el-button disabled>主要按钮</el-button>
+        <el-button disabled>成功按钮</el-button>
+        <el-button disabled>信息按钮</el-button>
+        <el-button disabled>警告按钮</el-button>
+        <el-button disabled>危险按钮</el-button>
+      </el-row>
+    </div>
+    <div class="mtop">
+      <el-row>
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item label="设备ID">
-            <el-input v-model="formInline.user" placeholder="设备ID"></el-input>
+            <el-input v-model="formInline.machineId" placeholder="设备ID"></el-input>
           </el-form-item>
           <el-form-item label="品牌">
-            <el-select v-model="formInline.region" placeholder="请选择品牌">
+            <el-select v-model="formInline.brand" placeholder="请选择品牌">
               <el-option label="海尔" value="海尔"></el-option>
               <el-option label="美的" value="美的"></el-option>
               <el-option label="其他" value="其他"></el-option>
@@ -52,8 +68,8 @@
             <el-button type="primary" @click="onSubmit">查询</el-button>
           </el-form-item>
         </el-form>
-      </div>
-    </el-row>
+      </el-row>
+    </div>
 
     <el-table :data="info" style="width: 100%">
       <el-table-column prop="createTime" label="添加日期"></el-table-column>
@@ -65,7 +81,6 @@
         width="300"
       ></el-table-column>
       <el-table-column prop="model" label="设备型号"> </el-table-column>
-
       <el-table-column prop="" label="操作">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit"></el-button>
@@ -98,6 +113,17 @@
 <script>
 import { formatDate } from "../../utils/formatDate.js";
 export default {
+  watch: {
+    current() {
+      this.axios
+        .get("/MachineList/" + this.current + "/" + this.size, {
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+          }, //oauth2.0认证
+        })
+        .then((response) => (this.info = response.data));
+    },
+  },
   data() {
     return {
       formLabelWidth: "120px",
@@ -113,8 +139,8 @@ export default {
       size: 7,
       info: null,
       formInline: {
-        user: "",
-        region: "",
+        machineId: "",
+        brand: "",
       },
       img: null,
     };
@@ -153,11 +179,34 @@ export default {
       this.current = val;
     },
     newmachine() {
+      this.axios
+        .post("/NewMachine", this.form, {
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+          }, //oauth2.0认证
+        })
+        .then(
+          (response) => (this.dialogFormVisible = false),
+          this.$message({
+            type: "success",
+            message: `添加一个设备`,
+          })
+        );
       // alert(this.form);
-      this.dialogFormVisible = false;
     },
     onSubmit() {
       console.log("submit!");
+      this.axios
+        .post(
+          "/QueryMachine/" + this.current + "/" + this.size,
+          this.formInline,
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+            }, //oauth2.0认证
+          }
+        )
+        .then((response) => (this.info = response.data));
     },
     QRcodeimg(val) {
       this.axios
@@ -171,7 +220,18 @@ export default {
           (response) => (
             (this.img = window.URL.createObjectURL(response.data)),
             this.$alert('<img src="' + this.img + '" alt="">', "设备二维码", {
+              confirmButtonText: "下载",
               dangerouslyUseHTMLString: true,
+              callback: (action) => {
+                // console.log(action)
+                if (action === "confirm") {
+                  var a = document.createElement("a");
+                  a.download = name || val.machineId + "MachineQRcode.jpg";
+                  // 设置图片地址
+                  a.href = this.img;
+                  a.click();
+                }
+              },
             }).catch((err) => {
               // console.log(err);
             })
@@ -183,6 +243,7 @@ export default {
 </script>
 <style scoped>
 .mtop {
+  margin-left: 10px;
   margin-top: 10px;
   float: left;
 }

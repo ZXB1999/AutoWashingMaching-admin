@@ -1,18 +1,17 @@
 <template>
   <div>
-    <el-row>
-      <div class="mtop">
+    <div class="mtop">
+      <el-row>
         <el-button>默认按钮</el-button>
         <el-button type="primary">主要按钮</el-button>
         <el-button type="success">成功按钮</el-button>
         <el-button type="info">信息按钮</el-button>
         <el-button type="warning">警告按钮</el-button>
         <el-button type="danger">危险按钮</el-button>
-      </div>
-    </el-row>
-
-    <el-row>
-      <div class="mtop">
+      </el-row>
+    </div>
+    <div class="mtop">
+      <el-row>
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item label="设备ID">
             <el-input v-model="formInline.user" placeholder="设备ID"></el-input>
@@ -28,9 +27,8 @@
             <el-button type="primary" @click="onSubmit">查询</el-button>
           </el-form-item>
         </el-form>
-      </div>
-    </el-row>
-
+      </el-row>
+    </div>
     <el-table :data="info" style="width: 100%">
       <el-table-column prop="createTime" label="注册日期"></el-table-column>
       <el-table-column prop="awmusername" label="账号"></el-table-column>
@@ -124,6 +122,7 @@ export default {
 </script>
 <style scoped>
 .mtop {
+  margin-left: 10px;
   margin-top: 10px;
   float: left;
 }
