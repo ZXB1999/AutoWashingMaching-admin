@@ -2,8 +2,8 @@
   <div>
     <el-container>
       <!-- 侧边 -->
-      <el-aside class="left" width="200px">
-        <Left></Left>
+      <el-aside class="left" :width="this.widval+'px'">
+        <Left v-on:wid="wid"></Left>
       </el-aside>
       <!-- 顶部 -->
       <el-container>
@@ -23,10 +23,21 @@
 import Top from "../../components/top/top.vue";
 import Left from "../../components/left/left.vue";
 export default {
+  data() {
+    return {
+      widval: 200
+    };
+  },
   components: {
     Top,
     Left,
-  }
+  },
+  methods: {
+    wid: function (val) {
+      this.widval=val
+      // console.log(val);
+    },
+  },
 };
 </script>
 
@@ -49,7 +60,7 @@ div {
 .el-container {
   height: 100%;
 }
-.el-main{
+.el-main {
   padding: 5px;
 }
 </style>

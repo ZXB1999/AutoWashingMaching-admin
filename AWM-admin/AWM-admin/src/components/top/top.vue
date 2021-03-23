@@ -10,7 +10,7 @@
       active-text-color="#ffd04b"
     >
       <el-menu-item index="1" @click="tomain">首页</el-menu-item>
-      <el-menu-item index="2" disabled>系统状态</el-menu-item>
+      <el-menu-item index="2" @click="tomap">设备分布</el-menu-item>
       <el-menu-item index="3" disabled>消息中心</el-menu-item>
       <span class="name">欢迎使用AutoWashingMaching-自助洗衣系统后台管理系统</span>
       <el-dropdown>
@@ -48,6 +48,9 @@ export default {
     },
     tomain(){
       this.$router.push('/homepage/main')
+    },
+    tomap(){
+      this.$router.push('/homepage/machineMap')
     }
   },
 };

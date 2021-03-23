@@ -7,6 +7,7 @@
           class="el-menu-vertical-demo"
           @open="handleOpen"
           @close="handleClose"
+          :collapse="isCollapse"
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b"
@@ -59,6 +60,7 @@ export default {
   data() {
     return {
       info: null,
+      isCollapse: false,
     };
   },
   methods: {
@@ -69,7 +71,17 @@ export default {
       console.log(key, keyPath);
     },
     home() {
-      this.$router.push("/homepage/main");
+      let that = this
+      if(this.isCollapse===false){
+        this.isCollapse=true;
+        that.$emit('wid',64);
+        return;
+      }else if(this.isCollapse===true){
+        this.isCollapse=false;
+        that.$emit('wid',200);
+        return;
+      }
+      
     },
     machinelist() {
       this.$router.push("/homepage/machinelist");
