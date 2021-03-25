@@ -44,7 +44,9 @@
         <el-button type="info">信息按钮</el-button>
         <el-button type="warning">警告按钮</el-button>
         <el-button type="danger">危险按钮</el-button> -->
-        <el-button type="danger" :disabled="this.isselect === 0">批量删除</el-button>
+        <el-button type="danger" :disabled="this.isselect === 0"
+          >批量删除</el-button
+        >
         <el-button disabled>成功按钮</el-button>
         <el-button disabled>信息按钮</el-button>
         <el-button disabled>警告按钮</el-button>
@@ -75,8 +77,7 @@
     </div>
 
     <el-table :data="info" style="width: 100%">
-      <el-table-column type="selection" width="55">
-      </el-table-column>
+      <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column prop="createTime" label="添加日期"></el-table-column>
       <el-table-column prop="updateTime" label="更新日期"></el-table-column>
       <el-table-column prop="brand" width="80" label="品牌"> </el-table-column>
@@ -263,7 +264,7 @@ export default {
 }
 </style>
 <style>
-.el-table-column--selection .cell{
+.el-table-column--selection .cell {
   padding-left: 10px;
 }
 .el-message-box {

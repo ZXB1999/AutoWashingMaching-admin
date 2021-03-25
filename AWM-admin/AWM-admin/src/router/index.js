@@ -8,6 +8,9 @@ import MachineList from '@/view/machine/machinelist.vue'
 import UserList from '@/view/user/userlist.vue'
 import OrderList from '@/view/order/orderlist.vue'
 import MachineMap from '@/view/map/machinemap.vue'
+import MachineDustbin from '@/view/dustbin/machinedustbin.vue'
+import OrderDustbin from '@/view/dustbin/orderdustbin.vue'
+import UserDustbin from '@/view/dustbin/userdustbin.vue'
 
 Vue.use(Router)
 
@@ -35,7 +38,7 @@ export default new Router({
       children: [
         {
           path: 'main',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
-          name: 'mian',
+          name: 'main',
           component: Main,
           meta: {
             needLogin: true, //需要加校检判断的路由
@@ -69,6 +72,30 @@ export default new Router({
           path: 'machineMap',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
           name: 'machineMap',
           component: MachineMap,
+          meta: {
+            needLogin: true, //需要加校检判断的路由
+          },
+        },
+        {
+          path: 'machinedustbin',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
+          name: 'machinedustbin',
+          component: MachineDustbin,
+          meta: {
+            needLogin: true, //需要加校检判断的路由
+          },
+        },
+        {
+          path: 'orderdustbin',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
+          name: 'orderdustbin',
+          component: OrderDustbin,
+          meta: {
+            needLogin: true, //需要加校检判断的路由
+          },
+        },
+        {
+          path: 'userdustbin',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
+          name: 'userdustbin',
+          component: UserDustbin,
           meta: {
             needLogin: true, //需要加校检判断的路由
           },

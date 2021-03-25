@@ -2,12 +2,12 @@
   <div>
     <div class="mtop">
       <el-row>
+        <el-button type="danger" disabled>批量删除</el-button>
         <el-button disabled>默认按钮</el-button>
         <el-button type="primary" disabled>主要按钮</el-button>
         <el-button type="success" disabled>成功按钮</el-button>
         <el-button type="info" disabled>信息按钮</el-button>
         <el-button type="warning" disabled>警告按钮</el-button>
-        <el-button type="danger" disabled>危险按钮</el-button>
       </el-row>
     </div>
     <div class="mtop">
@@ -30,6 +30,7 @@
       </el-row>
     </div>
     <el-table :data="info" style="width: 100%">
+      <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column prop="createTime" label="注册日期"></el-table-column>
       <el-table-column prop="awmusername" label="账号"></el-table-column>
       <el-table-column prop="awmname" label="昵称"></el-table-column>
@@ -37,7 +38,7 @@
       <el-table-column prop="paypwd" label="支付密码"> </el-table-column>
       <el-table-column>
         <el-button type="primary" icon="el-icon-edit"></el-button>
-        <el-button type="primary" icon="el-icon-delete"></el-button>
+        <el-button type="danger" icon="el-icon-delete"></el-button>
       </el-table-column>
     </el-table>
     <el-pagination

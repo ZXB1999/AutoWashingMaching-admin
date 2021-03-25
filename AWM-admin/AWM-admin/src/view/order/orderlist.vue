@@ -30,6 +30,7 @@
       </el-row>
     </div>
     <el-table :data="info" style="width: 100%">
+      <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column prop="createTime" label="订单创建时间"></el-table-column>
       <el-table-column prop="startTime" label="订单开始时间"></el-table-column>
       <el-table-column prop="orderId" label="订单ID"> </el-table-column>
@@ -41,7 +42,7 @@
       </el-table-column>
       <el-table-column>
         <el-button type="primary" icon="el-icon-edit"></el-button>
-        <el-button type="primary" icon="el-icon-delete"></el-button>
+        <el-button type="danger" icon="el-icon-delete"></el-button>
       </el-table-column>
     </el-table>
     <el-pagination

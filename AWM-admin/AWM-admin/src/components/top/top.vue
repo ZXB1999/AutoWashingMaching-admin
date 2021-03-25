@@ -12,7 +12,9 @@
       <el-menu-item index="1" @click="tomain">首页</el-menu-item>
       <el-menu-item index="2" @click="tomap">设备分布</el-menu-item>
       <el-menu-item index="3" disabled>消息中心</el-menu-item>
-      <span class="name">欢迎使用AutoWashingMaching-自助洗衣系统后台管理系统</span>
+      <span class="name"
+        >欢迎使用AutoWashingMaching-自助洗衣系统后台管理系统</span
+      >
       <el-dropdown>
         <i class="el-icon-setting" style="margin-right: 15px"></i>
         <el-dropdown-menu slot="dropdown">
@@ -24,8 +26,6 @@
       </el-dropdown>
       <span class="name">admin</span>
     </el-menu>
-
-    
   </div>
 </template>
 
@@ -42,33 +42,34 @@ export default {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
-    logout(){
-      sessionStorage.clear();
-      this.$router.push('/')
+    logout() {
+      this.axios
+        .get("/Logout/" + sessionStorage.getItem("access_token"))
+        .then(sessionStorage.clear(), this.$router.push("/"));
     },
-    tomain(){
-      this.$router.push('/homepage/main')
+    tomain() {
+      this.$router.push("/homepage/main");
     },
-    tomap(){
-      this.$router.push('/homepage/machineMap')
-    }
+    tomap() {
+      this.$router.push("/homepage/machineMap");
+    },
   },
 };
 </script>
 <style scoped>
-.el-icon-setting{
+.el-icon-setting {
   color: white;
 }
-.el-dropdown{
+.el-dropdown {
   font-size: 18px;
   margin-right: 15px;
 }
-.name{
+.name {
   color: white;
   font-size: 18px;
   margin-right: 30px;
 }
-.el-menu{
+.el-menu {
   border-bottom-width: 0px;
   height: 60px;
 }

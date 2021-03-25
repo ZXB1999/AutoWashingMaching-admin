@@ -41,15 +41,15 @@
             </template>
 
             <el-menu-item-group title="设备回收站">
-              <el-menu-item index="5-1">已删除设备</el-menu-item>
+              <el-menu-item @click="machinedustbin" index="5-1">已删除设备</el-menu-item>
             </el-menu-item-group>
 
             <el-menu-item-group title="用户回收站">
-              <el-menu-item index="5-2">已删除用户</el-menu-item>
+              <el-menu-item @click="userdustbin" index="5-2">已删除用户</el-menu-item>
             </el-menu-item-group>
 
             <el-menu-item-group title="订单回收站">
-              <el-menu-item index="5-3">已删除订单</el-menu-item>
+              <el-menu-item @click="orderdustbin" index="5-3">已删除订单</el-menu-item>
             </el-menu-item-group>
 
           </el-submenu>
@@ -94,6 +94,15 @@ export default {
     },
     orderlist() {
       this.$router.push("/homepage/orderlist");
+    },
+    machinedustbin() {
+      this.$router.push("/homepage/machinedustbin");
+    },
+    orderdustbin() {
+      this.$router.push("/homepage/orderdustbin");
+    },
+    userdustbin() {
+      this.$router.push("/homepage/userdustbin");
     },
   },
 };
