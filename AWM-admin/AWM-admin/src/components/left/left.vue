@@ -20,36 +20,40 @@
             <img src="../../assets/logo/logo01.png" alt="" />
             <span>自助洗衣后台管理系统</span>
           </el-menu-item>
-          <el-submenu index="2" disabled>
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>导航一</span>
-            </template>
-            <el-menu-item-group>
-              <template slot="title">分组一</template>
-              <el-menu-item index="2-1">选项1</el-menu-item>
-              <el-menu-item index="2-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="2-3">选项3</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="2-4">
-              <template slot="title">选项4</template>
-              <el-menu-item index="2-4-1">选项1</el-menu-item>
-            </el-submenu>
-          </el-submenu>
-          <el-menu-item @click="machinelist" index="3">
+          <el-menu-item @click="machinelist" index="2">
             <i class="el-icon-menu"></i>
             <span slot="title">设备</span>
           </el-menu-item>
-          <el-menu-item index="4" @click="userlist">
+          <el-menu-item index="3" @click="userlist">
             <i class="el-icon-document"></i>
-            <span slot="title" >用户</span>
+            <span slot="title">用户</span>
           </el-menu-item>
-          <el-menu-item index="5" @click="orderlist">
-            <i class="el-icon-setting"></i>
+          <el-menu-item index="4" @click="orderlist">
+            <i class="el-icon-receiving"></i>
             <span slot="title">订单</span>
           </el-menu-item>
+
+          <el-submenu index="5">
+
+            <template slot="title">
+              <i class="el-icon-delete-solid"></i>
+              <span>垃圾箱</span>
+            </template>
+
+            <el-menu-item-group title="设备回收站">
+              <el-menu-item index="5-1">已删除设备</el-menu-item>
+            </el-menu-item-group>
+
+            <el-menu-item-group title="用户回收站">
+              <el-menu-item index="5-2">已删除用户</el-menu-item>
+            </el-menu-item-group>
+
+            <el-menu-item-group title="订单回收站">
+              <el-menu-item index="5-3">已删除订单</el-menu-item>
+            </el-menu-item-group>
+
+          </el-submenu>
+
         </el-menu>
       </el-col>
     </el-row>
@@ -71,17 +75,16 @@ export default {
       console.log(key, keyPath);
     },
     home() {
-      let that = this
-      if(this.isCollapse===false){
-        this.isCollapse=true;
-        that.$emit('wid',64);
+      let that = this;
+      if (this.isCollapse === false) {
+        this.isCollapse = true;
+        that.$emit("wid", 64);
         return;
-      }else if(this.isCollapse===true){
-        this.isCollapse=false;
-        that.$emit('wid',200);
+      } else if (this.isCollapse === true) {
+        this.isCollapse = false;
+        that.$emit("wid", 200);
         return;
       }
-      
     },
     machinelist() {
       this.$router.push("/homepage/machinelist");
@@ -89,9 +92,9 @@ export default {
     userlist() {
       this.$router.push("/homepage/userList");
     },
-    orderlist(){
+    orderlist() {
       this.$router.push("/homepage/orderlist");
-    }
+    },
   },
 };
 </script>

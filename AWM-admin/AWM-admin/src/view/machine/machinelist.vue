@@ -44,7 +44,7 @@
         <el-button type="info">信息按钮</el-button>
         <el-button type="warning">警告按钮</el-button>
         <el-button type="danger">危险按钮</el-button> -->
-        <el-button disabled>主要按钮</el-button>
+        <el-button type="danger" :disabled="this.isselect === 0">批量删除</el-button>
         <el-button disabled>成功按钮</el-button>
         <el-button disabled>信息按钮</el-button>
         <el-button disabled>警告按钮</el-button>
@@ -55,7 +55,10 @@
       <el-row>
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item label="设备ID">
-            <el-input v-model="formInline.machineId" placeholder="设备ID"></el-input>
+            <el-input
+              v-model="formInline.machineId"
+              placeholder="设备ID"
+            ></el-input>
           </el-form-item>
           <el-form-item label="品牌">
             <el-select v-model="formInline.brand" placeholder="请选择品牌">
@@ -72,6 +75,8 @@
     </div>
 
     <el-table :data="info" style="width: 100%">
+      <el-table-column type="selection" width="55">
+      </el-table-column>
       <el-table-column prop="createTime" label="添加日期"></el-table-column>
       <el-table-column prop="updateTime" label="更新日期"></el-table-column>
       <el-table-column prop="brand" width="80" label="品牌"> </el-table-column>
@@ -83,8 +88,16 @@
       <el-table-column prop="model" label="设备型号"> </el-table-column>
       <el-table-column prop="" label="操作">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit"></el-button>
-          <el-button type="danger" icon="el-icon-delete"></el-button>
+          <el-tooltip placement="top">
+            <div slot="content">编辑设备</div>
+            <el-button type="primary" icon="el-icon-edit"></el-button>
+          </el-tooltip>
+
+          <el-tooltip placement="top">
+            <div slot="content">删除设备</div>
+            <el-button type="danger" icon="el-icon-delete"></el-button>
+          </el-tooltip>
+
           <el-tooltip placement="top">
             <div slot="content">点击查看设备二维码</div>
             <el-button
@@ -143,6 +156,7 @@ export default {
         brand: "",
       },
       img: null,
+      isselect: 0,
     };
   },
   created() {
@@ -249,6 +263,9 @@ export default {
 }
 </style>
 <style>
+.el-table-column--selection .cell{
+  padding-left: 10px;
+}
 .el-message-box {
   width: 320px;
 }
