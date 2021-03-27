@@ -96,7 +96,11 @@
 
           <el-tooltip placement="top">
             <div slot="content">删除设备</div>
-            <el-button type="danger" icon="el-icon-delete"></el-button>
+            <el-button
+              type="danger"
+              @click="PseudodeleteMachine(scope.row)"
+              icon="el-icon-delete"
+            ></el-button>
           </el-tooltip>
 
           <el-tooltip placement="top">
@@ -207,7 +211,6 @@ export default {
             message: `添加一个设备`,
           })
         );
-      // alert(this.form);
     },
     onSubmit() {
       console.log("submit!");
@@ -252,6 +255,31 @@ export default {
             })
           )
         );
+    },
+    PseudodeleteMachine(val) {
+      console.log(val);
+      this.axios
+        .post(
+          "/PseudodeleteMachine/" + val.machineId,
+          {},
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+            }, //oauth2.0认证)
+          }
+        )
+        .then((response) =>
+          this.$message({
+            type: "success",
+            message: "删除成功",
+          })
+        )
+        .catch((err) => {
+          this.$message({
+            type: "error",
+            message: "err",
+          });
+        });
     },
   },
 };

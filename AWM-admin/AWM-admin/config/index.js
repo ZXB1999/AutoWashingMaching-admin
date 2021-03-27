@@ -26,6 +26,13 @@ module.exports = {
           '^/Logout': '/oauth/Logout' 
         }
       },
+      '/Getusrmsg': {
+        target: 'http://localhost:9158',  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/Getusrmsg': '/oauth/check_token' 
+        }
+      },
       '/MachineList': {
         target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
         changOrigin: true,  //允许跨域
@@ -87,6 +94,13 @@ module.exports = {
         changOrigin: true,  //允许跨域
         pathRewrite: {
           '^/QueryMachine': '/AWM/PROVIDERMACHINE/queryMachine' 
+        }
+      },
+      '/PseudodeleteMachine': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/PseudodeleteMachine': '/AWM/PROVIDERMACHINE/PseudodeleteMachine' 
         }
       }
     },

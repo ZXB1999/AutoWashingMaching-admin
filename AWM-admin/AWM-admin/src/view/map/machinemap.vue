@@ -35,7 +35,7 @@ export default {
               show: false,
             },
           },
-          roam: false, //鼠标滚轮缩放
+          roam: true, //鼠标滚轮缩放
           aspectScale: 1, //地图长度比
         },
         series: [

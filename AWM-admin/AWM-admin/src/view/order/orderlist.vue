@@ -33,13 +33,11 @@
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column prop="createTime" label="订单创建时间"></el-table-column>
       <el-table-column prop="startTime" label="订单开始时间"></el-table-column>
-      <el-table-column prop="orderId" label="订单ID"> </el-table-column>
+      <el-table-column prop="orderId" label="订单ID"></el-table-column>
       <el-table-column prop="customerId" label="顾客ID"></el-table-column>
-      <el-table-column prop="machineId" label="设备ID"> </el-table-column>
-      <el-table-column prop="orderState" width="80" label="订单状态">
-      </el-table-column>
-      <el-table-column prop="serverlevel" width="80" label="服务">
-      </el-table-column>
+      <el-table-column prop="machineId" label="设备ID"></el-table-column>
+      <el-table-column prop="orderState" width="80" label="订单状态"></el-table-column>
+      <el-table-column prop="serverlevel" width="80" label="服务"></el-table-column>
       <el-table-column>
         <el-button type="primary" icon="el-icon-edit"></el-button>
         <el-button type="danger" icon="el-icon-delete"></el-button>

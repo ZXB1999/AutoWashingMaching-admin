@@ -3,7 +3,7 @@
     <el-row class="tac">
       <el-col :span="24">
         <el-menu
-          default-active="2"
+          :default-active="$route.path"
           class="el-menu-vertical-demo"
           @open="handleOpen"
           @close="handleClose"
@@ -20,40 +20,43 @@
             <img src="../../assets/logo/logo01.png" alt="" />
             <span>自助洗衣后台管理系统</span>
           </el-menu-item>
-          <el-menu-item @click="machinelist" index="2">
+          <el-menu-item @click="machinelist" index="/homepage/machinelist">
             <i class="el-icon-menu"></i>
             <span slot="title">设备</span>
           </el-menu-item>
-          <el-menu-item index="3" @click="userlist">
+          <el-menu-item index="/homepage/userList" @click="userlist">
             <i class="el-icon-document"></i>
             <span slot="title">用户</span>
           </el-menu-item>
-          <el-menu-item index="4" @click="orderlist">
+          <el-menu-item index="/homepage/orderlist" @click="orderlist">
             <i class="el-icon-receiving"></i>
             <span slot="title">订单</span>
           </el-menu-item>
 
-          <el-submenu index="5">
-
+          <el-submenu index="/homepage">
             <template slot="title">
               <i class="el-icon-delete-solid"></i>
               <span>垃圾箱</span>
             </template>
 
             <el-menu-item-group title="设备回收站">
-              <el-menu-item @click="machinedustbin" index="5-1">已删除设备</el-menu-item>
+              <el-menu-item @click="machinedustbin" index="/homepage/machinedustbin"
+                >已删除设备</el-menu-item
+              >
             </el-menu-item-group>
 
             <el-menu-item-group title="用户回收站">
-              <el-menu-item @click="userdustbin" index="5-2">已删除用户</el-menu-item>
+              <el-menu-item @click="userdustbin" index="/homepage/userdustbin"
+                >已删除用户</el-menu-item
+              >
             </el-menu-item-group>
 
             <el-menu-item-group title="订单回收站">
-              <el-menu-item @click="orderdustbin" index="5-3">已删除订单</el-menu-item>
+              <el-menu-item @click="orderdustbin" index="/homepage/orderdustbin"
+                >已删除订单</el-menu-item
+              >
             </el-menu-item-group>
-
           </el-submenu>
-
         </el-menu>
       </el-col>
     </el-row>

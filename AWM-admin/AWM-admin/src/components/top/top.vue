@@ -1,7 +1,7 @@
 <template>
   <div id="top">
     <el-menu
-      :default-active="activeIndex2"
+      :default-active="$route.path"
       class="el-menu-demo"
       mode="horizontal"
       @select="handleSelect"
@@ -9,8 +9,10 @@
       text-color="#fff"
       active-text-color="#ffd04b"
     >
-      <el-menu-item index="1" @click="tomain">首页</el-menu-item>
-      <el-menu-item index="2" @click="tomap">设备分布</el-menu-item>
+      <el-menu-item index="/homepage/main" @click="tomain">首页</el-menu-item>
+      <el-menu-item index="/homepage/machineMap" @click="tomap"
+        >设备分布</el-menu-item
+      >
       <el-menu-item index="3" disabled>消息中心</el-menu-item>
       <span class="name"
         >欢迎使用AutoWashingMaching-自助洗衣系统后台管理系统</span
@@ -24,7 +26,7 @@
           <el-dropdown-item @click.native="logout">注销</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <span class="name">admin</span>
+      <span class="name">{{username}}</span>
     </el-menu>
   </div>
 </template>
@@ -34,9 +36,13 @@
 export default {
   data() {
     return {
-      activeIndex: "1",
-      activeIndex2: "1",
+      username: null
     };
+  },
+  created() {
+    this.axios
+      .post("/Getusrmsg?token=" + sessionStorage.getItem("access_token"))
+      .then((req)=>(this.username=req.data.user_name));
   },
   methods: {
     handleSelect(key, keyPath) {
