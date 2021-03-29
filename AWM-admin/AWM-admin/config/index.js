@@ -102,7 +102,29 @@ module.exports = {
         pathRewrite: {
           '^/PseudodeleteMachine': '/AWM/PROVIDERMACHINE/PseudodeleteMachine' 
         }
+      },
+      '/StatisticalHour': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/StatisticalHour': '/AWM/PROVIDERORDER/statisticalhour' 
+        }
+      },
+      '/StatisticalWeek': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/StatisticalWeek': '/AWM/PROVIDERORDER/statisticalweek' 
+        }
+      },
+      '/StatisticalSaleRoom': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/StatisticalSaleRoom': '/AWM/PROVIDERORDER/statisticalsaleroom' 
+        }
       }
+      
     },
 
     // Various Dev Server settings

@@ -2,7 +2,12 @@
   <div class="Echarts">
     <el-row>
       <h1>订单分析</h1>
-      <div class="ec" id="main" style="width: 50%; height: 400px"></div>
+      <div
+        class="ec"
+        id="main"
+        ref="hour"
+        style="width: 50%; height: 400px"
+      ></div>
       <div class="ec" id="main1" style="width: 50%; height: 400px"></div>
     </el-row>
     <el-row>
@@ -16,11 +21,13 @@
 <script>
 export default {
   name: "Echarts",
+  data() {
+    return {};
+  },
   methods: {
-    myEcharts() {
+    myEcharts(val) {
       // 基于准备好的dom，初始化echarts实例<-----------------------------------******************
-      var myChart = this.$echarts.init(document.getElementById("main"));
-
+      var myChart = this.$echarts.init(this.$refs.hour);
       // 指定图表的配置项和数据
       var option = {
         title: {
@@ -64,30 +71,30 @@ export default {
             name: "订单量",
             type: "bar",
             data: [
-              5,
-              124,
-              36,
-              3,
-              10,
-              20,
-              5,
-              4,
-              36,
-              10,
-              10,
-              146,
-              5,
-              20,
-              36,
-              34,
-              10,
-              20,
-              5,
-              33,
-              36,
-              3,
-              10,
-              20,
+              val[1],
+              val[2],
+              val[3],
+              val[4],
+              val[5],
+              val[6],
+              val[7],
+              val[8],
+              val[9],
+              val[11],
+              val[11],
+              val[12],
+              val[13],
+              val[14],
+              val[15],
+              val[16],
+              val[17],
+              val[18],
+              val[19],
+              val[20],
+              val[21],
+              val[22],
+              val[23],
+              val[24],
             ],
           },
         ],
@@ -96,20 +103,31 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    myEcharts1() {
+    myEcharts1(val) {
       var myChart1 = this.$echarts.init(document.getElementById("main1"));
-      var axisData = [
-        "周一",
-        "周二",
-        "周三",
-        "很长很长的周四",
-        "周五",
-        "周六",
-        "周日",
-      ];
-      var data = axisData.map(function (item, i) {
-        return Math.round(Math.random() * 1000 * (i + 1));
-      });
+      var axisData = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
+      var data = [0, 0, 0, 0, 0, 0, 0];
+      if (val.Monday !== undefined) {
+        data[0] = val.Monday;
+      }
+      if (val.Tuesday !== undefined) {
+        data[1] = val.Tuesday;
+      }
+      if (val.Wednesday !== undefined) {
+        data[2] = val.Wednesday;
+      }
+      if (val.Thursday !== undefined) {
+        data[3] = val.Thursday;
+      }
+      if (val.Friday !== undefined) {
+        data[4] = val.Friday;
+      }
+      if (val.Saturday !== undefined) {
+        data[5] = val.Saturday;
+      }
+      if (val.Tuesday !== undefined) {
+        data[6] = val.Tuesday;
+      }
       var links = data.map(function (item, i) {
         return {
           source: i,
@@ -152,7 +170,7 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       myChart1.setOption(option);
     },
-    myEcharts2() {
+    myEcharts2(val) {
       var myChart2 = this.$echarts.init(document.getElementById("main2"));
       var option = {
         title: {
@@ -187,10 +205,18 @@ export default {
         ],
         series: [
           {
-            name: "直接访问",
+            name: "收入￥",
             type: "bar",
             barWidth: "60%",
-            data: [10, 52, 200, 334, 390, 330, 220],
+            data: [
+              val.Monday,
+              val.Tuesday,
+              val.Wednesday,
+              val.Thursday,
+              val.Friday,
+              val.Saturday,
+              val.Tuesday,
+            ],
           },
         ],
       };
@@ -246,9 +272,33 @@ export default {
     },
   },
   mounted() {
-    this.myEcharts();
-    this.myEcharts1();
-    this.myEcharts2();
+    this.axios
+      .get("/StatisticalHour", {
+        headers: {
+          Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+        }, //oauth2.0认证
+      })
+      .then((response) => {
+        this.myEcharts(response.data);
+      });
+    this.axios
+      .get("/StatisticalWeek", {
+        headers: {
+          Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+        }, //oauth2.0认证
+      })
+      .then((response) => {
+        this.myEcharts1(response.data);
+      });
+    this.axios
+      .get("/StatisticalSaleRoom", {
+        headers: {
+          Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+        }, //oauth2.0认证
+      })
+      .then((response) => {
+        this.myEcharts2(response.data);
+      });
     this.myEcharts3();
   },
 };
