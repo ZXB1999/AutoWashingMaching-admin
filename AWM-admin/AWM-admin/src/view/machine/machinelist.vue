@@ -257,7 +257,6 @@ export default {
         );
     },
     PseudodeleteMachine(val) {
-      console.log(val);
       this.axios
         .post(
           "/PseudodeleteMachine/" + val.machineId,
@@ -272,7 +271,8 @@ export default {
           this.$message({
             type: "success",
             message: "删除成功",
-          })
+          }),
+          this.$router.push("/homepage/machinedustbin")
         )
         .catch((err) => {
           this.$message({
