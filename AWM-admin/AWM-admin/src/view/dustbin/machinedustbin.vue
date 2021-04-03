@@ -2,17 +2,12 @@
   <div>
     <el-row>
       <el-col
-        :span="6"
+        :span="4"
         v-for="(ary, index) in arrary"
         :key="index"
-        :offset="index > 0 ? 1 : 0"
       >
-        <el-card :body-style="{ padding: '0px' }">
-          <div>
-            <!-- {{item}} -->
-            <!-- <img :src="img[index]" class="image"/>  -->
-          </div>
-          <img :src="img[index]" class="image"/>
+        <el-card :body-style="{ padding: '10px' }">
+          <img :src="img[index]" class="image" />
           <div style="padding: 14px">
             <span>{{ ary.brand }}</span>
             <div class="bottom clearfix">
@@ -35,8 +30,8 @@ export default {
     };
   },
   mounted() {
-    var msg= []
-    var _this = this
+    var msg = [];
+    var _this = this;
     this.axios
       .get("/MachinerecycleBin", {
         headers: {
@@ -56,21 +51,11 @@ export default {
             .then((res) => {
               msg.push(
                 JSON.parse(JSON.stringify(window.URL.createObjectURL(res.data)))
-              )
-              // this.img.push(
-              //   JSON.parse(JSON.stringify(window.URL.createObjectURL(res.data)))
-              // );
-              console.log(msg)
-              //_this.img = msg;
-              //console.log(_this.img)
+              );
             });
         }
         this.arrary = response.data;
-        _this.img = msg
-        console.log(_this.img)
-        // this.$data.img = msg
-        // console.log(this.$data.img)
-        // console.log(this.img[0])
+        _this.img = msg;
       });
   },
 };

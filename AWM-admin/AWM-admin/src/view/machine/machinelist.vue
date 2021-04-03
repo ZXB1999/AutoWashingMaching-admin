@@ -44,7 +44,7 @@
         <el-button type="info">信息按钮</el-button>
         <el-button type="warning">警告按钮</el-button>
         <el-button type="danger">危险按钮</el-button> -->
-        <el-button type="danger" :disabled="this.isselect === 0"
+        <el-button type="danger" @click="PseudodeletelistMachine" :disabled="isPseudodeletelist"
           >批量删除</el-button
         >
         <el-button disabled>成功按钮</el-button>
@@ -76,7 +76,12 @@
       </el-row>
     </div>
 
-    <el-table :data="info" style="width: 100%">
+    <el-table
+      :data="info"
+      style="width: 100%"
+      @select="choiseone"
+      @select-all="choiseall"
+    >
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column prop="createTime" label="添加日期"></el-table-column>
       <el-table-column prop="updateTime" label="更新日期"></el-table-column>
@@ -161,7 +166,8 @@ export default {
         brand: "",
       },
       img: null,
-      isselect: 0,
+      Pseudodeletelist: [],
+      isPseudodeletelist: true,
     };
   },
   created() {
@@ -267,11 +273,12 @@ export default {
             }, //oauth2.0认证)
           }
         )
-        .then((response) =>
-          this.$message({
-            type: "success",
-            message: "删除成功",
-          }),
+        .then(
+          (response) =>
+            this.$message({
+              type: "success",
+              message: "删除成功",
+            }),
           this.$router.push("/homepage/machinedustbin")
         )
         .catch((err) => {
@@ -281,6 +288,49 @@ export default {
           });
         });
     },
+    choiseone(row) {
+      this.Pseudodeletelist = row;
+      if (this.Pseudodeletelist.length > 1) {
+        this.isPseudodeletelist = false;
+      } else {
+        this.isPseudodeletelist = true;
+      }
+    },
+    choiseall(selection) {
+      this.Pseudodeletelist = selection;
+      if (this.Pseudodeletelist.length > 1) {
+        this.isPseudodeletelist = false;
+      } else {
+        this.isPseudodeletelist = true;
+      }
+    },
+    PseudodeletelistMachine(){
+      var that = this
+      this.axios
+        .post(
+          "/PseudodeleteListMachine",
+          this.Pseudodeletelist,
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+            }, //oauth2.0认证)
+          }
+        )
+        .then(
+          (response) =>
+            this.$message({
+              type: "success",
+              message: "删除成功",
+            }),
+          this.$router.push("/homepage/machinedustbin")
+        )
+        .catch((err) => {
+          this.$message({
+            type: "error",
+            message: "err",
+          });
+        });
+    }
   },
 };
 </script>

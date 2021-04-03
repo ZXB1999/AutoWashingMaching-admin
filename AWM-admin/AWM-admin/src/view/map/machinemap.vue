@@ -66,6 +66,7 @@ export default {
         }, //oauth2.0认证
       })
       .then((response) => {
+        console.log(response.data)
         this.myEcharts(response.data);
       });
   },
