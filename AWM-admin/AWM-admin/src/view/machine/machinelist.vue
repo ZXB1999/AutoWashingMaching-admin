@@ -9,10 +9,10 @@
       </el-breadcrumb>
     </div> -->
 
-    <div class="mtop">
+    <div class="mtopL">
       <el-row>
         <el-button type="primary" @click="dialogFormVisible = true"
-          >新增设备</el-button
+          ><i class="el-icon-folder-add"></i>新增设备</el-button
         >
         <el-dialog title="设备信息" :visible.sync="dialogFormVisible">
           <el-form :model="form">
@@ -39,21 +39,21 @@
             <el-button type="primary" @click="newmachine">确 定</el-button>
           </div>
         </el-dialog>
-        <!-- <el-button type="primary">主要按钮</el-button>
-        <el-button type="success">成功按钮</el-button>
-        <el-button type="info">信息按钮</el-button>
-        <el-button type="warning">警告按钮</el-button>
-        <el-button type="danger">危险按钮</el-button> -->
-        <el-button type="danger" @click="PseudodeletelistMachine" :disabled="isPseudodeletelist"
-          >批量删除</el-button
+        <el-button
+          type="danger"
+          @click="PseudodeletelistMachine"
+          :disabled="isPseudodeletelist"
+          ><i class="el-icon-folder-delete"></i>批量删除</el-button
         >
-        <el-button disabled>成功按钮</el-button>
-        <el-button disabled>信息按钮</el-button>
-        <el-button disabled>警告按钮</el-button>
-        <el-button disabled>危险按钮</el-button>
+        <el-button type="success" disabled
+          ><i class="el-icon-folder"></i>表格导入</el-button
+        >
+        <el-button type="success" disabled
+          ><i class="el-icon-folder-opened"></i>表格导出</el-button
+        >
       </el-row>
     </div>
-    <div class="mtop">
+    <div class="mtopR">
       <el-row>
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item label="设备ID">
@@ -96,8 +96,54 @@
         <template slot-scope="scope">
           <el-tooltip placement="top">
             <div slot="content">编辑设备</div>
-            <el-button type="primary" icon="el-icon-edit"></el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              @click="updatemachine(scope.row)"
+            ></el-button>
           </el-tooltip>
+          <el-dialog title="修改设备信息" :visible.sync="uptmachine">
+            <el-form>
+              <el-form-item label="设备型号" :label-width="formLabelWidth">
+                <el-input
+                  autocomplete="off"
+                  v-model="beforeupdatemachinemsg.brand"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="设备型号" :label-width="formLabelWidth">
+                <el-input
+                  autocomplete="off"
+                  v-model="beforeupdatemachinemsg.model"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="服务类型" :label-width="formLabelWidth">
+                <el-input
+                  autocomplete="off"
+                  v-model="beforeupdatemachinemsg.type"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="经度" :label-width="formLabelWidth">
+                <el-input
+                  autocomplete="off"
+                  v-model="beforeupdatemachinemsg.longitude"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="纬度" :label-width="formLabelWidth">
+                <el-input
+                  autocomplete="off"
+                  v-model="beforeupdatemachinemsg.latitude"
+                ></el-input>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="uptmachine = false">取 消</el-button>
+              <el-button
+                type="primary"
+                @click="commituptmachine(beforeupdatemachinemsg.type)"
+                >确 定</el-button
+              >
+            </div>
+          </el-dialog>
 
           <el-tooltip placement="top">
             <div slot="content">删除设备</div>
@@ -159,7 +205,7 @@ export default {
       hosp: true,
       totals: 0,
       current: 1,
-      size: 7,
+      size: 8,
       info: null,
       formInline: {
         machineId: "",
@@ -168,6 +214,8 @@ export default {
       img: null,
       Pseudodeletelist: [],
       isPseudodeletelist: true,
+      uptmachine: false,
+      beforeupdatemachinemsg: null,
     };
   },
   created() {
@@ -177,7 +225,12 @@ export default {
           Authorization: "Bearer " + sessionStorage.getItem("access_token"),
         }, //oauth2.0认证
       })
-      .then((response) => (this.info = response.data));
+      .then(
+        (response) => (
+          (this.info = response.data),
+          (this.beforeupdatemachinemsg = response.data[0])
+        )
+      );
     this.axios
       .get("/CountMachine", {
         headers: {
@@ -221,16 +274,12 @@ export default {
     onSubmit() {
       console.log("submit!");
       this.axios
-        .post(
-          "/QueryMachine/" + this.current + "/" + this.size,
-          this.formInline,
-          {
-            headers: {
-              Authorization: "Bearer " + sessionStorage.getItem("access_token"),
-            }, //oauth2.0认证
-          }
-        )
-        .then((response) => (this.info = response.data));
+        .post("/QueryMachine/" + this.current + "/" + 1000, this.formInline, {
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+          }, //oauth2.0认证
+        })
+        .then((response) => ((this.info = response.data), (this.totals = 0)));
     },
     QRcodeimg(val) {
       this.axios
@@ -304,18 +353,14 @@ export default {
         this.isPseudodeletelist = true;
       }
     },
-    PseudodeletelistMachine(){
-      var that = this
+    PseudodeletelistMachine() {
+      var that = this;
       this.axios
-        .post(
-          "/PseudodeleteListMachine",
-          this.Pseudodeletelist,
-          {
-            headers: {
-              Authorization: "Bearer " + sessionStorage.getItem("access_token"),
-            }, //oauth2.0认证)
-          }
-        )
+        .post("/PseudodeleteListMachine", this.Pseudodeletelist, {
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+          }, //oauth2.0认证)
+        })
         .then(
           (response) =>
             this.$message({
@@ -330,15 +375,36 @@ export default {
             message: "err",
           });
         });
-    }
+    },
+    updatemachine(val) {
+      this.uptmachine = true;
+      this.beforeupdatemachinemsg = val;
+    },
+    commituptmachine(val) {
+      alert(val);
+    },
   },
 };
 </script>
 <style scoped>
-.mtop {
+.mtopL {
   margin-left: 10px;
   margin-top: 10px;
   float: left;
+}
+.mtopR {
+  margin-left: 10px;
+  margin-top: 10px;
+  float: right;
+}
+.el-table {
+  height: 585px;
+}
+.el-table::before {
+  height: 0;
+}
+.el-button {
+  margin: 0;
 }
 </style>
 <style>

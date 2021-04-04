@@ -1,32 +1,36 @@
 <template>
   <div>
-    <div class="mtop">
+    <div class="mtopL">
       <el-row>
-        <el-button type="danger" disabled>批量删除</el-button>
-        <el-button disabled>默认按钮</el-button>
-        <el-button type="primary" disabled>主要按钮</el-button>
-        <el-button type="success" disabled>成功按钮</el-button>
-        <el-button type="info" disabled>信息按钮</el-button>
-        <el-button type="warning" disabled>警告按钮</el-button>
+        <el-button type="danger" disabled
+          ><i class="el-icon-folder-delete"></i>批量删除</el-button
+        >
+        <el-button type="success" disabled
+          ><i class="el-icon-folder-opened"></i>导出表格</el-button
+        >
       </el-row>
     </div>
-    <div class="mtop">
+    <div class="mtopR">
       <el-row>
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
-          <el-form-item label="设备ID">
-            <el-input v-model="formInline.user" placeholder="设备ID"></el-input>
-          </el-form-item>
-          <el-form-item label="品牌">
-            <el-select v-model="formInline.region" placeholder="请选择品牌">
-              <el-option label="海尔" value="海尔"></el-option>
-              <el-option label="美的" value="美的"></el-option>
-              <el-option label="其他" value="其他"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
-          </el-form-item>
-        </el-form>
+        <el-input
+          style="width: 180px"
+          v-model="selinput"
+          clearable
+          placeholder="请输入账号"
+        ></el-input>
+        <el-date-picker
+          v-model="value2"
+          type="daterange"
+          align="right"
+          unlink-panels
+          range-separator="至"
+          start-placeholder="注册日期"
+          end-placeholder="注册日期"
+          :picker-options="pickerOptions"
+          value-format="yyyy-MM-dd HH:mm:ss"
+        >
+        </el-date-picker>
+        <el-button type="primary" @click="onSubmit">查 找</el-button>
       </el-row>
     </div>
     <el-table :data="info" style="width: 100%">
@@ -36,7 +40,7 @@
       <el-table-column prop="awmname" label="昵称"></el-table-column>
       <el-table-column prop="password" label="密码"> </el-table-column>
       <el-table-column prop="paypwd" label="支付密码"> </el-table-column>
-      <el-table-column>
+      <el-table-column label="操作">
         <el-button type="primary" icon="el-icon-edit"></el-button>
         <el-button type="danger" icon="el-icon-delete"></el-button>
       </el-table-column>
@@ -73,12 +77,47 @@ export default {
       hosp: true,
       totals: 0,
       current: 1,
-      size: 7,
+      size: 8,
       info: null,
       formInline: {
         user: "",
         region: "",
       },
+
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+        ],
+      },
+      value1: "",
+      value2: "",
+      selinput: null,
     };
   },
   created() {
@@ -117,14 +156,29 @@ export default {
     },
     onSubmit() {
       console.log("submit!");
+      console.log(this.value2);
     },
   },
 };
 </script>
 <style scoped>
-.mtop {
+.mtopL {
   margin-left: 10px;
   margin-top: 10px;
   float: left;
+}
+.mtopR {
+  margin-left: 10px;
+  margin-top: 10px;
+  float: right;
+}
+.el-table {
+  height: 607px;
+}
+.el-table::before {
+  height: 0;
+}
+.el-button {
+  margin: 0;
 }
 </style>

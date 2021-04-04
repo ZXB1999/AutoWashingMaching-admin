@@ -15,13 +15,13 @@
       >
       <el-menu-item index="3" disabled>消息中心</el-menu-item>
       <span class="name"
-        >欢迎使用AutoWashingMaching-自助洗衣系统后台管理系统</span
+        >欢迎使用AutoWashingMachie-自助洗衣系统后台管理系统</span
       >
       <el-dropdown>
         <i class="el-icon-setting" style="margin-right: 15px"></i>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>查看</el-dropdown-item>
-          <el-dropdown-item>新增</el-dropdown-item>
+          <el-dropdown-item @click.native="sysaccountto">账户</el-dropdown-item>
+          <el-dropdown-item @click.native="systo">系统</el-dropdown-item>
           <!-- 父组件想在子组件上监听自己的click的话，需要加上native修饰符 -->
           <el-dropdown-item @click.native="logout">注销</el-dropdown-item>
         </el-dropdown-menu>
@@ -59,6 +59,12 @@ export default {
     tomap() {
       this.$router.push("/homepage/machineMap");
     },
+    systo(){
+      window.location.href = 'http://192.168.1.106:7001'; 
+    },
+    sysaccountto(){
+      // this.$router.push("/homepage/machineMap");
+    }
   },
 };
 </script>
