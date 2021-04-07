@@ -5,7 +5,7 @@
         <el-button type="success" disabled
           ><i class="el-icon-folder-opened"></i>表格导出</el-button
         >
-        <el-button type="danger" disabled
+        <el-button type="danger" :disabled="isPseudodeletelist"
           ><i class="el-icon-folder-delete"></i>批量删除</el-button
         >
       </el-row>
@@ -39,7 +39,8 @@
         <el-button type="primary" @click="onSubmit">查 找</el-button>
       </el-row>
     </div>
-    <el-table :data="info" style="width: 100%">
+    <el-table :data="info" style="width: 100%" @select="choiseone"
+      @select-all="choiseall">
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column prop="createTime" label="订单创建时间"></el-table-column>
       <el-table-column prop="startTime" label="订单开始时间"></el-table-column>
@@ -146,6 +147,7 @@ export default {
       value2: "",
       selinput1: null,
       selinput2: null,
+      isPseudodeletelist: true,
     };
   },
   created() {
@@ -184,6 +186,22 @@ export default {
     },
     onSubmit() {
       console.log("submit!");
+    },
+    choiseone(row) {
+      this.Pseudodeletelist = row;
+      if (this.Pseudodeletelist.length > 1) {
+        this.isPseudodeletelist = false;
+      } else {
+        this.isPseudodeletelist = true;
+      }
+    },
+    choiseall(selection) {
+      this.Pseudodeletelist = selection;
+      if (this.Pseudodeletelist.length > 1) {
+        this.isPseudodeletelist = false;
+      } else {
+        this.isPseudodeletelist = true;
+      }
     },
   },
 };

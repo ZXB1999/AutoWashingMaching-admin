@@ -39,12 +39,19 @@
             <el-button type="primary" @click="newmachine">确 定</el-button>
           </div>
         </el-dialog>
-        <el-button
-          type="danger"
-          @click="PseudodeletelistMachine"
-          :disabled="isPseudodeletelist"
-          ><i class="el-icon-folder-delete"></i>批量删除</el-button
+
+        <el-popconfirm
+          title="选定内容确定删除吗？"
+          @confirm="PseudodeletelistMachine"
         >
+          <el-button
+            slot="reference"
+            type="danger"
+            :disabled="isPseudodeletelist"
+            ><i class="el-icon-folder-delete"></i>批量删除</el-button
+          >
+        </el-popconfirm>
+
         <el-button type="success" disabled
           ><i class="el-icon-folder"></i>表格导入</el-button
         >
@@ -147,11 +154,16 @@
 
           <el-tooltip placement="top">
             <div slot="content">删除设备</div>
-            <el-button
-              type="danger"
-              @click="PseudodeleteMachine(scope.row)"
-              icon="el-icon-delete"
-            ></el-button>
+            <el-popconfirm
+              title="这一条内容确定删除吗？"
+              @confirm="PseudodeleteMachine(scope.row)"
+            >
+              <el-button
+                slot="reference"
+                type="danger"
+                icon="el-icon-delete"
+              ></el-button>
+            </el-popconfirm>
           </el-tooltip>
 
           <el-tooltip placement="top">
@@ -184,13 +196,28 @@ import { formatDate } from "../../utils/formatDate.js";
 export default {
   watch: {
     current() {
-      this.axios
-        .get("/MachineList/" + this.current + "/" + this.size, {
-          headers: {
-            Authorization: "Bearer " + sessionStorage.getItem("access_token"),
-          }, //oauth2.0认证
-        })
-        .then((response) => (this.info = response.data));
+      if (!this.isselectpage) {
+        this.axios
+          .get("/MachineList/" + this.current + "/" + this.size, {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+            }, //oauth2.0认证
+          })
+          .then((response) => (this.info = response.data));
+      } else {
+        this.axios
+          .post(
+            "/QueryMachine/" + this.current + "/" + this.size,
+            this.formInline,
+            {
+              headers: {
+                Authorization:
+                  "Bearer " + sessionStorage.getItem("access_token"),
+              }, //oauth2.0认证
+            }
+          )
+          .then((response) => (this.info = response.data));
+      }
     },
   },
   data() {
@@ -216,6 +243,7 @@ export default {
       isPseudodeletelist: true,
       uptmachine: false,
       beforeupdatemachinemsg: null,
+      isselectpage: false,
     };
   },
   created() {
@@ -272,14 +300,28 @@ export default {
         );
     },
     onSubmit() {
-      console.log("submit!");
       this.axios
-        .post("/QueryMachine/" + this.current + "/" + 1000, this.formInline, {
+        .post(
+          "/QueryMachine/" + this.current + "/" + this.size,
+          this.formInline,
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+            }, //oauth2.0认证
+          }
+        )
+        .then(
+          (response) => (
+            (this.info = response.data), (this.isselectpage = true)
+          )
+        );
+      this.axios
+        .post("/QueryMachinesize", this.formInline, {
           headers: {
             Authorization: "Bearer " + sessionStorage.getItem("access_token"),
           }, //oauth2.0认证
         })
-        .then((response) => ((this.info = response.data), (this.totals = 0)));
+        .then((response) => (this.totals = response.data));
     },
     QRcodeimg(val) {
       this.axios
@@ -354,7 +396,6 @@ export default {
       }
     },
     PseudodeletelistMachine() {
-      var that = this;
       this.axios
         .post("/PseudodeleteListMachine", this.Pseudodeletelist, {
           headers: {

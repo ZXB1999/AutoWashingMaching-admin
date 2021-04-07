@@ -2,9 +2,11 @@
   <div>
     <div class="mtopL">
       <el-row>
-        <el-button type="danger" disabled
-          ><i class="el-icon-folder-delete"></i>批量删除</el-button
-        >
+        <el-popconfirm title="确定封禁这些用户吗？" @confirm="toban">
+          <el-button slot="reference" type="danger" :disabled="isbanlist"
+            ><i class="el-icon-circle-close"></i>批量封禁</el-button
+          >
+        </el-popconfirm>
         <el-button type="success" disabled
           ><i class="el-icon-folder-opened"></i>导出表格</el-button
         >
@@ -33,7 +35,12 @@
         <el-button type="primary" @click="onSubmit">查 找</el-button>
       </el-row>
     </div>
-    <el-table :data="info" style="width: 100%">
+    <el-table
+      :data="info"
+      style="width: 100%"
+      @select="banone"
+      @select-all="banall"
+    >
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column prop="createTime" label="注册日期"></el-table-column>
       <el-table-column prop="awmusername" label="账号"></el-table-column>
@@ -41,10 +48,21 @@
       <el-table-column prop="password" label="密码"> </el-table-column>
       <el-table-column prop="paypwd" label="支付密码"> </el-table-column>
       <el-table-column label="操作">
-        <el-button type="primary" icon="el-icon-edit"></el-button>
-        <el-button type="danger" icon="el-icon-delete"></el-button>
+        <template slot-scope="scope">
+          <el-tooltip placement="top">
+            <div slot="content">封禁用户</div>
+            <el-popconfirm title="确定封禁吗？" @confirm="banuser(scope.row)">
+              <el-button
+                slot="reference"
+                type="danger"
+                icon="el-icon-circle-close"
+              ></el-button>
+            </el-popconfirm>
+          </el-tooltip>
+        </template>
       </el-table-column>
     </el-table>
+
     <el-pagination
       background
       :hide-on-single-page="this.hosp"
@@ -63,13 +81,38 @@ import { formatDate } from "../../utils/formatDate.js";
 export default {
   watch: {
     current() {
-      this.axios
-        .get("/UserList/" + this.current + "/" + this.size, {
-          headers: {
-            Authorization: "Bearer " + sessionStorage.getItem("access_token"),
-          }, //oauth2.0认证
-        })
-        .then((response) => (this.info = response.data));
+      if (!this.isselectpage) {
+        this.axios
+          .get("/UserList/" + this.current + "/" + this.size, {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+            }, //oauth2.0认证
+          })
+          .then((response) => (this.info = response.data));
+      } else {
+        var commit = {};
+        if (this.selinput != null && this.selinput != undefined) {
+          commit.awmusername = this.selinput;
+        }
+        if (this.value2.length === 2) {
+          commit.begin = this.value2[0];
+          commit.end = this.value2[1];
+        }
+        this.axios
+          .post(
+            "/MulticonditionalqueryUser/" + this.current + "/" + this.size,
+            commit,
+            {
+              headers: {
+                Authorization:
+                  "Bearer " + sessionStorage.getItem("access_token"),
+              }, //oauth2.0认证
+            }
+          )
+          .then((response) => {
+            this.info = response.data;
+          });
+      }
     },
   },
   data() {
@@ -118,6 +161,9 @@ export default {
       value1: "",
       value2: "",
       selinput: null,
+      isbanlist: true,
+      userbanlist: null,
+      isselectpage: false,
     };
   },
   created() {
@@ -155,8 +201,100 @@ export default {
       this.current = val;
     },
     onSubmit() {
-      console.log("submit!");
-      console.log(this.value2);
+      var commit = {};
+      if (this.selinput != null && this.selinput != undefined) {
+        commit.awmusername = this.selinput;
+      }
+      if (this.value2.length === 2) {
+        commit.begin = this.value2[0];
+        commit.end = this.value2[1];
+      }
+      this.axios
+        .post(
+          "/MulticonditionalqueryUser/" + this.current + "/" + this.size,
+          commit,
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+            }, //oauth2.0认证
+          }
+        )
+        .then((response) => {
+          this.info = response.data;
+          this.isselectpage = true;
+        });
+      this.axios
+        .post("/MulticonditionalqueryUsersize", commit, {
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+          }, //oauth2.0认证
+        })
+        .then((response) => {
+          this.totals = response.data;
+        });
+    },
+    banuser(val) {
+      var ulist = [];
+      ulist.push(val);
+      this.userbanlist = ulist;
+      this.axios
+        .put("/PseudodeleteListUser", this.userbanlist, {
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+          }, //oauth2.0认证)
+        })
+        .then(
+          (response) =>
+            this.$message({
+              type: "success",
+              message: "删除成功",
+            }),
+          this.$router.push("/homepage/userdustbin")
+        )
+        .catch((err) => {
+          this.$message({
+            type: "error",
+            message: "err",
+          });
+        });
+    },
+    banone(row) {
+      if (row.length > 1) {
+        this.isbanlist = false;
+      } else {
+        this.isbanlist = true;
+      }
+      this.userbanlist = row;
+    },
+    banall(selection) {
+      if (selection.length > 1) {
+        this.isbanlist = false;
+      } else {
+        this.isbanlist = true;
+      }
+      this.userbanlist = selection;
+    },
+    toban() {
+      this.axios
+        .put("/PseudodeleteListUser", this.userbanlist, {
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+          }, //oauth2.0认证)
+        })
+        .then(
+          (response) =>
+            this.$message({
+              type: "success",
+              message: "删除成功",
+            }),
+          this.$router.push("/homepage/userdustbin")
+        )
+        .catch((err) => {
+          this.$message({
+            type: "error",
+            message: "err",
+          });
+        });
     },
   },
 };

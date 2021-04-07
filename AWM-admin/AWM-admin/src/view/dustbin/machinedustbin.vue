@@ -1,12 +1,8 @@
 <template>
   <div>
     <el-row>
-      <el-col
-        :span="4"
-        v-for="(ary, index) in arrary"
-        :key="index"
-      >
-        <el-card :body-style="{ padding: '10px' }">
+      <el-col :span="4" v-for="(ary, index) in arrary" :key="index">
+        <el-card shadow="hover" :body-style="{ padding: '10px' }">
           <img :src="img[index]" class="image" />
           <div style="padding: 14px">
             <span>{{ ary.brand }}</span>

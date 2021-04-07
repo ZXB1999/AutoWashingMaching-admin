@@ -41,19 +41,19 @@
 
             <el-menu-item-group title="设备回收站">
               <el-menu-item @click="machinedustbin" index="/homepage/machinedustbin"
-                >已删除设备</el-menu-item
+                >已删除的设备</el-menu-item
               >
             </el-menu-item-group>
 
             <el-menu-item-group title="用户回收站">
               <el-menu-item @click="userdustbin" index="/homepage/userdustbin"
-                >已删除用户</el-menu-item
+                >已封禁的用户</el-menu-item
               >
             </el-menu-item-group>
 
             <el-menu-item-group title="订单回收站">
               <el-menu-item @click="orderdustbin" index="/homepage/orderdustbin"
-                >已删除订单</el-menu-item
+                >已删除的订单</el-menu-item
               >
             </el-menu-item-group>
           </el-submenu>

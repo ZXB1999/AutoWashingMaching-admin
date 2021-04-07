@@ -144,6 +144,41 @@ module.exports = {
         pathRewrite: {
           '^/PseudodeleteListMachine': '/AWM/PROVIDERMACHINE/PseudodeletelistMachine' 
         }
+      },
+      '/PseudodeleteListUser': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/PseudodeleteListUser': '/AWM/PROVIDERUSER/PseudodeletelistUser' 
+        }
+      },
+      '/BlackHouse': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/BlackHouse': '/AWM/PROVIDERUSER/blackhouse' 
+        }
+      },
+      '/MulticonditionalqueryUser': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/MulticonditionalqueryUser': '/AWM/PROVIDERUSER/MulticonditionalqueryUser' 
+        }
+      },
+      '/QueryMachinesize': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/QueryMachinesize': '/AWM/PROVIDERMACHINE/queryMachinesize' 
+        }
+      },
+      '/MulticonditionalqueryUsersize': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/MulticonditionalqueryUsersize': '/AWM/PROVIDERUSER/MulticonditionalqueryUsersize' 
+        }
       }
       
     },
