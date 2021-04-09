@@ -17,6 +17,8 @@
         </el-drawer>
       </div>
     </el-drawer>
+
+    <el-button @click="dow">测试下载</el-button>
   </div>
 </template>
 
@@ -35,6 +37,9 @@ export default {
           done();
         })
         .catch((_) => {});
+    },
+    dow() {
+      window.location.href = 'http://192.168.1.106:8091/download'; 
     },
   },
 };
