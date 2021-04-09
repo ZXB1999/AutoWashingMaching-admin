@@ -13,7 +13,7 @@
       <el-menu-item index="/homepage/machineMap" @click="tomap"
         >设备分布</el-menu-item
       >
-      <el-menu-item index="3" disabled>消息中心</el-menu-item>
+      <el-menu-item index="/homepage/messagehub" @click="tomsg">消息中心</el-menu-item>
       <span class="name"
         >欢迎使用AutoWashingMachie-自助洗衣系统后台管理系统</span
       >
@@ -62,8 +62,8 @@ export default {
     systo(){
       window.location.href = 'http://192.168.1.106:7001'; 
     },
-    sysaccountto(){
-      // this.$router.push("/homepage/machineMap");
+    tomsg(){
+      this.$router.push("/homepage/messagehub");
     }
   },
 };

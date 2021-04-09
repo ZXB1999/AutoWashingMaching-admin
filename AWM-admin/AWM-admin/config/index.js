@@ -179,6 +179,34 @@ module.exports = {
         pathRewrite: {
           '^/MulticonditionalqueryUsersize': '/AWM/PROVIDERUSER/MulticonditionalqueryUsersize' 
         }
+      },
+      '/PseudodeletelistOrder': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/PseudodeletelistOrder': '/AWM/PROVIDERORDER/PseudodeletelistOrder' 
+        }
+      },
+      '/MulticonditionalqueryOrder': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/MulticonditionalqueryOrder': '/AWM/PROVIDERORDER/MulticonditionalqueryOrder' 
+        }
+      },
+      '/CountMulticonditionalqueryOrder': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/CountMulticonditionalqueryOrder': '/AWM/PROVIDERORDER/CountMulticonditionalqueryOrder' 
+        }
+      },
+      '/Orderdustbin': {
+        target: serverpath,  //这里后台的地址模拟的;应该填写你们真实的后台接口
+        changOrigin: true,  //允许跨域
+        pathRewrite: {
+          '^/Orderdustbin': '/AWM/PROVIDERORDER/Orderdustbin' 
+        }
       }
       
     },

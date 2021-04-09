@@ -53,7 +53,7 @@
 
             <el-menu-item-group title="订单回收站">
               <el-menu-item @click="orderdustbin" index="/homepage/orderdustbin"
-                >已删除的订单</el-menu-item
+                >已失效的订单</el-menu-item
               >
             </el-menu-item-group>
           </el-submenu>

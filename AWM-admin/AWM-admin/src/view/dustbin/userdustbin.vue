@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>小黑屋</h1>
     <el-row :gutter="12">
       <el-col :span="4" v-for="(user, index) in usersmsg" :key="index"
         ><el-card

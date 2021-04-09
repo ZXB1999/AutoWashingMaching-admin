@@ -11,6 +11,7 @@ import MachineMap from '@/view/map/machinemap.vue'
 import MachineDustbin from '@/view/dustbin/machinedustbin.vue'
 import OrderDustbin from '@/view/dustbin/orderdustbin.vue'
 import UserDustbin from '@/view/dustbin/userdustbin.vue'
+import Messagehub from '@/view/messagehub/messagehub.vue'
 
 Vue.use(Router)
 
@@ -96,6 +97,14 @@ export default new Router({
           path: 'userdustbin',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
           name: 'userdustbin',
           component: UserDustbin,
+          meta: {
+            needLogin: true, //需要加校检判断的路由
+          },
+        },
+        {
+          path: 'messagehub',//以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了。
+          name: 'messagehub',
+          component: Messagehub,
           meta: {
             needLogin: true, //需要加校检判断的路由
           },

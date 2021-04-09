@@ -5,9 +5,14 @@
         <el-button type="success" disabled
           ><i class="el-icon-folder-opened"></i>表格导出</el-button
         >
-        <el-button type="danger" :disabled="isPseudodeletelist"
-          ><i class="el-icon-folder-delete"></i>批量删除</el-button
-        >
+        <el-popconfirm title="这一条内容确定删除吗？" @confirm="toban">
+          <el-button
+            slot="reference"
+            type="danger"
+            :disabled="isPseudodeletelist"
+            ><i class="el-icon-folder-delete"></i>批量失效</el-button
+          >
+        </el-popconfirm>
       </el-row>
     </div>
     <div class="mtopR">
@@ -39,8 +44,12 @@
         <el-button type="primary" @click="onSubmit">查 找</el-button>
       </el-row>
     </div>
-    <el-table :data="info" style="width: 100%" @select="choiseone"
-      @select-all="choiseall">
+    <el-table
+      :data="info"
+      style="width: 100%"
+      @select="choiseone"
+      @select-all="choiseall"
+    >
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column prop="createTime" label="订单创建时间"></el-table-column>
       <el-table-column prop="startTime" label="订单开始时间"></el-table-column>
@@ -59,18 +68,53 @@
         label="设备ID"
         width="280"
       ></el-table-column>
-      <el-table-column
-        prop="orderState"
-        width="80"
-        label="订单状态"
-      ></el-table-column>
-      <el-table-column
-        prop="serverlevel"
-        width="80"
-        label="服务"
-      ></el-table-column>
+      <!-- prop="orderState" -->
+      <el-table-column width="80" label="订单状态">
+        <template slot-scope="scope">
+          <span v-if="scope.row.orderState == 0">正常</span>
+          <span v-else>停用</span>
+        </template>
+      </el-table-column>
+      <!-- prop="serverlevel" -->
+      <el-table-column width="80" label="服务">
+        <template slot-scope="scope">
+          <span
+            v-if="
+              scope.row.serverlevel == 'MIN' || scope.row.serverlevel == 'ONE'
+            "
+            ><el-button type="success" circle>少量</el-button></span
+          >
+          <span
+            v-else-if="
+              scope.row.serverlevel == 'MID' || scope.row.serverlevel == 'TWO'
+            "
+            ><el-button type="warning" circle>中量</el-button></span
+          >
+          <span
+            v-else-if="
+              scope.row.serverlevel == 'MAX' || scope.row.serverlevel == 'THREE'
+            "
+            ><el-button type="info" circle>大量</el-button></span
+          >
+          <span v-else><el-button type="primary" circle>甩干</el-button></span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
-        <el-button type="danger" icon="el-icon-delete"></el-button>
+        <template slot-scope="scope">
+          <el-tooltip placement="top">
+            <div slot="content">订单失效</div>
+            <el-popconfirm
+              title="这一条内容确定删除吗？"
+              @confirm="PseudodeleteOrder(scope.row)"
+            >
+              <el-button
+                slot="reference"
+                type="danger"
+                icon="el-icon-delete"
+              ></el-button>
+            </el-popconfirm>
+          </el-tooltip>
+        </template>
       </el-table-column>
     </el-table>
     <el-pagination
@@ -91,13 +135,28 @@ import { formatDate } from "../../utils/formatDate.js";
 export default {
   watch: {
     current() {
-      this.axios
-        .get("/OrderList/" + this.current + "/" + this.size, {
-          headers: {
-            Authorization: "Bearer " + sessionStorage.getItem("access_token"),
-          }, //oauth2.0认证
-        })
-        .then((response) => (this.info = response.data));
+      if (!this.isselectpage) {
+        this.axios
+          .get("/OrderList/" + this.current + "/" + this.size, {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+            }, //oauth2.0认证
+          })
+          .then((response) => (this.info = response.data));
+      } else {
+        this.axios
+          .post(
+            "/MulticonditionalqueryOrder/" + this.current + "/" + this.size,
+            this.fl,
+            {
+              headers: {
+                Authorization:
+                  "Bearer " + sessionStorage.getItem("access_token"),
+              }, //oauth2.0认证
+            }
+          )
+          .then((response) => (this.info = response.data));
+      }
     },
   },
   data() {
@@ -107,10 +166,6 @@ export default {
       current: 1,
       size: 8,
       info: null,
-      formInline: {
-        user: "",
-        region: "",
-      },
 
       pickerOptions: {
         shortcuts: [
@@ -148,6 +203,8 @@ export default {
       selinput1: null,
       selinput2: null,
       isPseudodeletelist: true,
+      isselectpage: false,
+      fl: null,
     };
   },
   created() {
@@ -185,7 +242,42 @@ export default {
       this.current = val;
     },
     onSubmit() {
-      console.log("submit!");
+      var comrut = {};
+      if (this.selinput1 != null && this.selinput1 != "") {
+        comrut.awmusername = this.selinput1;
+      }
+      if (this.selinput2 != null && this.selinput2 != "") {
+        comrut.machineId = this.selinput2;
+      }
+      if (this.value2.length === 2) {
+        comrut.begin = this.value2[0];
+        comrut.end = this.value2[1];
+      }
+
+      this.fl = comrut;
+
+      this.axios
+        .post(
+          "/MulticonditionalqueryOrder/" + this.current + "/" + this.size,
+          this.fl,
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+            }, //oauth2.0认证
+          }
+        )
+        .then(
+          (response) => (
+            (this.info = response.data), (this.isselectpage = true)
+          )
+        );
+      this.axios
+        .post("/CountMulticonditionalqueryOrder", this.fl, {
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+          }, //oauth2.0认证
+        })
+        .then((response) => (this.totals = response.data));
     },
     choiseone(row) {
       this.Pseudodeletelist = row;
@@ -202,6 +294,52 @@ export default {
       } else {
         this.isPseudodeletelist = true;
       }
+    },
+    PseudodeleteOrder(val) {
+      var Olist = [];
+      Olist.push(val);
+      this.axios
+        .put("/PseudodeletelistOrder", Olist, {
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+          }, //oauth2.0认证)
+        })
+        .then(
+          (response) =>
+            this.$message({
+              type: "success",
+              message: "删除成功",
+            }),
+          this.$router.push("/homepage/orderdustbin")
+        )
+        .catch((err) => {
+          this.$message({
+            type: "error",
+            message: "err",
+          });
+        });
+    },
+    toban() {
+      this.axios
+        .put("/PseudodeletelistOrder", this.Pseudodeletelist, {
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+          }, //oauth2.0认证)
+        })
+        .then(
+          (response) =>
+            this.$message({
+              type: "success",
+              message: "删除成功",
+            }),
+          this.$router.push("/homepage/orderdustbin")
+        )
+        .catch((err) => {
+          this.$message({
+            type: "error",
+            message: "err",
+          });
+        });
     },
   },
 };
