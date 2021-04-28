@@ -37,7 +37,7 @@
             /></div
         ></el-col>
         <el-col :span="8"
-          ><div style="margin-top: 30px;" class="imgsty">
+          ><div style="margin-top: 30px" class="imgsty">
             <img
               src="../../assets/logo/Echartslogo.png"
               height="36"
@@ -55,11 +55,12 @@ export default {
     return {
       username: "",
       password: "",
+      authorities: "",
     };
   },
   methods: {
     login() {
-      let that=this
+      let that = this;
       this.axios
         .post(
           "/Login?client_id=" +
@@ -76,18 +77,30 @@ export default {
             this.password
         )
         .then((res) => {
-            localStorage.clear();
-            sessionStorage["access_token"] = res.data.access_token;
-            this.$message({
-            type: 'success',
-            message: '登陆成功'
-          });
-            this.$router.push("/homepage/main");
+          localStorage.clear();
+          this.axios
+            .post("/Getusrmsg?token=" + res.data.access_token)
+            .then((req) => {
+              this.authorities = req.data.authorities[0];
+              if (this.authorities === "ADMIN") {
+                sessionStorage["access_token"] = res.data.access_token;
+                this.$message({
+                  type: "success",
+                  message: "登陆成功",
+                });
+                this.$router.push("/homepage/main");
+              } else {
+                that.$message({
+                  type: "error",
+                  message: "您的账户没有权限",
+                });
+              }
+            });
         })
         .catch(function () {
-            that.$message({
-            type: 'error',
-            message: 'ERROR'
+          that.$message({
+            type: "error",
+            message: "ERROR",
           });
         });
     },
