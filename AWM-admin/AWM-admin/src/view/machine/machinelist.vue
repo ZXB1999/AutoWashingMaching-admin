@@ -1,14 +1,5 @@
 <template>
   <div>
-    <!-- <div>
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-        <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-        <el-breadcrumb-item>活动详情</el-breadcrumb-item>
-      </el-breadcrumb>
-    </div> -->
-
     <div class="mtopL">
       <el-row>
         <el-button type="primary" @click="dialogFormVisible = true"
@@ -39,7 +30,12 @@
             <el-button type="primary" @click="newmachine">确 定</el-button>
           </div>
         </el-dialog>
-
+        <el-button type="success" @click="choisedowexcall"
+          ><i class="el-icon-folder-opened"></i>全部导出</el-button
+        >
+        <el-button type="success" disabled
+          ><i class="el-icon-folder"></i>表格导入</el-button
+        >
         <el-popconfirm
           title="选定内容确定删除吗？"
           @confirm="PseudodeletelistMachine"
@@ -52,10 +48,10 @@
           >
         </el-popconfirm>
 
-        <el-button type="success" disabled
-          ><i class="el-icon-folder"></i>表格导入</el-button
-        >
-        <el-button type="success" disabled
+        <el-button
+          type="success"
+          :disabled="isPseudodeletelist"
+          @click="choisedowexc"
           ><i class="el-icon-folder-opened"></i>表格导出</el-button
         >
       </el-row>
@@ -93,6 +89,14 @@
       <el-table-column prop="createTime" label="添加日期"></el-table-column>
       <el-table-column prop="updateTime" label="更新日期"></el-table-column>
       <el-table-column prop="brand" width="80" label="品牌"> </el-table-column>
+      <!-- prop="type" -->
+      <el-table-column width="80" label="设备类型">
+        <template slot-scope="scope">
+          <span v-if="scope.row.type == '1'">洗衣机</span>
+          <span v-else-if="scope.row.type == '2'">洗鞋机</span>
+          <span v-else>其他</span>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="machineId"
         label="设备ID"
@@ -111,7 +115,7 @@
           </el-tooltip>
           <el-dialog title="修改设备信息" :visible.sync="uptmachine">
             <el-form>
-              <el-form-item label="设备型号" :label-width="formLabelWidth">
+              <el-form-item label="设备品牌" :label-width="formLabelWidth">
                 <el-input
                   autocomplete="off"
                   v-model="beforeupdatemachinemsg.brand"
@@ -146,7 +150,7 @@
               <el-button @click="uptmachine = false">取 消</el-button>
               <el-button
                 type="primary"
-                @click="commituptmachine(beforeupdatemachinemsg.type)"
+                @click="commituptmachine(beforeupdatemachinemsg)"
                 >确 定</el-button
               >
             </div>
@@ -422,8 +426,91 @@ export default {
       this.beforeupdatemachinemsg = val;
     },
     commituptmachine(val) {
-      alert(val);
+      // console.log(val)
+      this.axios
+        .post("/CommitUptMachine", val, {
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+          }, //oauth2.0认证)
+        })
+        .then(
+          (response) =>
+            this.$message({
+              type: "success",
+              message: "更新成功",
+            }),
+            this.uptmachine = false
+        )
+        .catch((err) => {
+          this.$message({
+            type: "error",
+            message: "err",
+          });
+        });
     },
+    choisedowexc() {
+      var machineIds = [];
+      for (var i = 0; i < this.Pseudodeletelist.length; i++) {
+        machineIds.push(this.Pseudodeletelist[i].machineId);
+      }
+      this.axios
+        .get("/Download", {
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+          }, //oauth2.0认证
+          responseType: "blob", //防止导出文件破损或乱码
+          params: {
+            machineids: machineIds, //goodsIds:[1,2,3]
+          },
+          paramsSerializer: function (params) {
+            return params.machineids.map((_) => `machineids=${_}`).join("&");
+          },
+        })
+        .then((res) => {
+          const link = document.createElement("a");
+          let blob = new Blob([res.data], {
+            type:
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          });
+          link.style.display = "none";
+          link.href = URL.createObjectURL(blob);
+          link.download = new Date().getTime() + ".xlsx"; //下载的文件名
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        })
+        .catch();
+    },
+
+    choisedowexcall() {
+      var machineIds = [];
+      for (var i = 0; i < this.Pseudodeletelist.length; i++) {
+        machineIds.push(this.Pseudodeletelist[i].machineId);
+      }
+      this.axios
+        .get("/Download?machineids=all", {
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+          }, //oauth2.0认证
+          responseType: "blob", //防止导出文件破损或乱码
+        })
+        .then((res) => {
+          const link = document.createElement("a");
+          let blob = new Blob([res.data], {
+            type:
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          });
+          link.style.display = "none";
+          link.href = URL.createObjectURL(blob);
+          link.download = new Date().getTime() + ".xlsx"; //下载的文件名
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        })
+        .catch();
+    },
+
+
   },
 };
 </script>

@@ -6,7 +6,7 @@ import school from "../../../static/mapjson/school.json";
 export default {
   methods: {
     myEcharts(val) {
-      // 基于准备好的dom，初始化echarts实例<-----------------------------------******************
+      // 基于准备好的dom，初始化echarts实例
       this.$echarts.registerMap("school", school);
       var myChart = this.$echarts.init(document.getElementById("map"));
       // 指定图表的配置项和数据
@@ -20,7 +20,6 @@ export default {
         tooltip: {
           trigger: "item",
           formatter: function (param) {
-            // console.log(param.data);
             let str = param.data;
             return str.name + "<br/>" + str.state;
           },
@@ -48,9 +47,9 @@ export default {
             type: "scatter",
             coordinateSystem: "geo",
             itemStyle: {
-              color: "#67C23A",
+              color: "#67C23A",//点的颜色
             },
-            data: val
+            data: val //点的数据
           },
         ],
       };
